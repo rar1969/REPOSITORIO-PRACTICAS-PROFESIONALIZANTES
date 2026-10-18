@@ -1,0 +1,52 @@
+[
+  {
+    "id": "ALU-01",
+    "dni": "45.123.890",
+    "nombre": "Mateo Carrizo",
+    "escuela": "Escuela Técnica N° 1 'Independencia'",
+    "especialidad": "Electromecánica",
+    "curso": "7° 1ª",
+    "estado": "En Práctica",
+    "empresa": "Scania Argentina S.A."
+  },
+  {
+    "id": "ALU-02",
+    "dni": "45.987.654",
+    "nombre": "Sofia Albarracín",
+    "escuela": "Escuela Técnica N° 1 'Rafael Marino'",
+    "especialidad": "Informática",
+    "curso": "7° 2ª",
+    "estado": "En Práctica",
+    "empresa": "Citrusvil S.A."
+  },
+  {
+    "id": "ALU-03",
+    "dni": "46.234.112",
+    "nombre": "Joaquín Mansilla",
+    "escuela": "Escuela Técnica N° 1 de Monteros",
+    "especialidad": "Química",
+    "curso": "7° 1ª",
+    "estado": "En Práctica",
+    "empresa": "Arcor S.A. - La Providencia"
+  },
+  {
+    "id": "ALU-04",
+    "dni": "45.765.432",
+    "nombre": "Lucía Fernández",
+    "escuela": "Escuela Agrotécnica 'Amaicha del Valle'",
+    "especialidad": "Agropecuaria",
+    "curso": "7° 1ª",
+    "estado": "Finalizado",
+    "empresa": "EEAOC"
+  },
+  {
+    "id": "ALU-05",
+    "dni": "46.109.876",
+    "nombre": "Santiago Roldán",
+    "escuela": "Escuela Técnica N° 3 'Juan B. Terán'",
+    "especialidad": "Informática",
+    "curso": "7° 3ª",
+    "estado": "Asignado",
+    "empresa": "Polo Tecnológico Tucumán"
+  }
+]

@@ -1,0 +1,165 @@
+[
+  {
+    "id": "OFER-TUC-001",
+    "razon_social": "Scania Argentina S.A. - Planta Tucumán",
+    "cuit": "30-54128920-4",
+    "tipo_organizacion": "Empresa Privada",
+    "departamento": "Cruz Alta",
+    "localidad": "Colombres",
+    "direccion": "Ruta Nacional 9 Km 1288",
+    "latitud": -26.8521,
+    "longitud": -65.132,
+    "telefono": "+54 381 492-1000",
+    "correo": "practicas.tucuman@scania.com",
+    "sitio_web": "https://scania.com/ar",
+    "contacto_persona": "Ing. Gonzalo Albornoz (Gerente de Planta)",
+    "especialidades": [
+      "Electromecánica",
+      "Automotores",
+      "Mecanizado CNC"
+    ],
+    "perfiles_requeridos": "Técnicos electromecánicos para ensamblado de transmisiones de alta precisión, control de calidad metrológico y mantenimiento industrial CNC.",
+    "escuelas_vinculadas": [
+      "Escuela Técnica N° 1 'Independencia'",
+      "Escuela Técnica N° 1 de Ranchillos"
+    ],
+    "convenio_vigente": true,
+    "fecha_inicio": "2024-03-15",
+    "fecha_vencimiento": "2026-12-31",
+    "cupos_disponibles": 12,
+    "tipo_practica": "Presencial",
+    "estado": "activo",
+    "observaciones": "Planta industrial modelo con tecnología de punta en mecanizado de engranajes.",
+    "fecha_actualizacion": "2026-09-01"
+  },
+  {
+    "id": "OFER-TUC-002",
+    "razon_social": "Grupo Lucci - Citrusvil S.A.",
+    "cuit": "30-68912345-2",
+    "tipo_organizacion": "Empresa Privada",
+    "departamento": "Tafí Viejo",
+    "localidad": "Tafí Viejo",
+    "direccion": "Ruta 305 Km 7.5",
+    "latitud": -26.741,
+    "longitud": -65.258,
+    "telefono": "+54 381 450-8000",
+    "correo": "rrhh@citrusvil.com.ar",
+    "sitio_web": "https://grupolucci.com.ar",
+    "contacto_persona": "Lic. Mariana Roldán (RRHH)",
+    "especialidades": [
+      "Agropecuaria",
+      "Química",
+      "Electromecánica"
+    ],
+    "perfiles_requeridos": "Análisis físico-químico de jugos concentrados y aceites esenciales, control de empaque citrícola y mantenimiento de líneas de empaque.",
+    "escuelas_vinculadas": [
+      "Escuela Técnica N° 1 'Rafael Marino'",
+      "Escuela Agrotécnica 'Juan Mantovani'"
+    ],
+    "convenio_vigente": true,
+    "fecha_inicio": "2024-05-01",
+    "fecha_vencimiento": "2026-11-30",
+    "cupos_disponibles": 10,
+    "tipo_practica": "Presencial",
+    "estado": "activo",
+    "observaciones": "Empresa líder mundial en procesamiento y exportación de limón.",
+    "fecha_actualizacion": "2026-08-25"
+  },
+  {
+    "id": "OFER-TUC-003",
+    "razon_social": "Arcor S.A. - Ingenio La Providencia",
+    "cuit": "33-50001234-9",
+    "tipo_organizacion": "Empresa Privada",
+    "departamento": "Monteros",
+    "localidad": "Monteros",
+    "direccion": "Av. España s/n",
+    "latitud": -27.1655,
+    "longitud": -65.4988,
+    "telefono": "+54 3863 42-1100",
+    "correo": "rrhh.providencia@arcor.com",
+    "sitio_web": "https://arcor.com",
+    "contacto_persona": "Ing. Esteban Mansilla",
+    "especialidades": [
+      "Química",
+      "Electromecánica",
+      "Energías Renovables"
+    ],
+    "perfiles_requeridos": "Laboratorio azucarero, control de destilería de bioetanol, automatización de calderas de bagazo y generación de bioenergía.",
+    "escuelas_vinculadas": [
+      "Escuela Técnica N° 1 de Monteros"
+    ],
+    "convenio_vigente": true,
+    "fecha_inicio": "2025-02-10",
+    "fecha_vencimiento": "2027-02-10",
+    "cupos_disponibles": 8,
+    "tipo_practica": "Presencial",
+    "estado": "activo",
+    "observaciones": "Ingenio azucarero y destilería con cogeneración de energía limpia.",
+    "fecha_actualizacion": "2026-08-20"
+  },
+  {
+    "id": "OFER-TUC-004",
+    "razon_social": "Polo Tecnológico Tucumán & Software Devs",
+    "cuit": "30-71654321-8",
+    "tipo_organizacion": "PyME / Clúster",
+    "departamento": "Yerba Buena",
+    "localidad": "Yerba Buena",
+    "direccion": "Av. Aconquija 2100",
+    "latitud": -26.818,
+    "longitud": -65.285,
+    "telefono": "+54 381 431-9900",
+    "correo": "talent@polotecnologicotuc.org",
+    "sitio_web": "https://polotecnologicotuc.org",
+    "contacto_persona": "Lic. Facundo Benítez",
+    "especialidades": [
+      "Informática",
+      "Robótica y Mecatrónica"
+    ],
+    "perfiles_requeridos": "Desarrollo web Fullstack React/Python, programación IoT para agrotecnología y aseguramiento de calidad QA software.",
+    "escuelas_vinculadas": [
+      "Escuela Técnica N° 3 'Juan B. Terán'",
+      "Escuela Técnica N° 2 'Obispo Colombres'"
+    ],
+    "convenio_vigente": true,
+    "fecha_inicio": "2024-09-10",
+    "fecha_vencimiento": "2026-09-10",
+    "cupos_disponibles": 15,
+    "tipo_practica": "Semipresencial",
+    "estado": "activo",
+    "observaciones": "Clúster tecnológico de empresas de software e innovación digital.",
+    "fecha_actualizacion": "2026-09-02"
+  },
+  {
+    "id": "OFER-TUC-005",
+    "razon_social": "Estación Experimental Agroindustrial Obispo Colombres (EEAOC)",
+    "cuit": "30-54689012-1",
+    "tipo_organizacion": "Organismo Público Autárquico",
+    "departamento": "Tafí Viejo",
+    "localidad": "Las Talitas",
+    "direccion": "Av. William Cross 3150",
+    "latitud": -26.785,
+    "longitud": -65.189,
+    "telefono": "+54 381 452-1000",
+    "correo": "vinculacion@eeaoc.org.ar",
+    "sitio_web": "https://eeaoc.org.ar",
+    "contacto_persona": "Dra. Lucía Romano (Investigación)",
+    "especialidades": [
+      "Agropecuaria",
+      "Química",
+      "Biotecnología"
+    ],
+    "perfiles_requeridos": "Ensayos agrícolas de caña de uva y cítricos, análisis de biotecnología vegetal, procesamiento de imágenes satelitales agro.",
+    "escuelas_vinculadas": [
+      "Escuela Agrotécnica 'Amaicha del Valle'",
+      "Escuela Agrotécnica 'Juan Mantovani'"
+    ],
+    "convenio_vigente": true,
+    "fecha_inicio": "2023-04-01",
+    "fecha_vencimiento": "2026-04-01",
+    "cupos_disponibles": 14,
+    "tipo_practica": "Presencial",
+    "estado": "activo",
+    "observaciones": "Centro de investigación referente en el NOA científico e industrial.",
+    "fecha_actualizacion": "2026-08-30"
+  }
+]

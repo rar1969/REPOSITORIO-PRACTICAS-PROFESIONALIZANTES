@@ -1,0 +1,62 @@
+[
+  {
+    "id": "CAP-01",
+    "titulo": "Capacitación en Automatización Industrial y Robótica ABB",
+    "organismo": "ABB Argentina & Polo Tecnológico Tucumán",
+    "tipo": "Empresa Privada / Multinacional",
+    "horas_certificadas": 60,
+    "modalidad": "Presencial + Práctica en Taller",
+    "destinatarios": "Alumnos de 7° Año de Electromecánica y Electrónica",
+    "escuelas_participantes": 8,
+    "participantes_inscritos": 145,
+    "estado": "En Curso",
+    "fecha_inicio": "2026-08-10",
+    "fecha_fin": "2026-10-15",
+    "lugar": "Talleres Escuela Técnica N° 1 'Independencia' & Scania"
+  },
+  {
+    "id": "CAP-02",
+    "titulo": "Programa de Formación Agro-Biotecnológica EEAOC",
+    "organismo": "Estación Experimental Agroindustrial Obispo Colombres",
+    "tipo": "Organismo Público Autárquico",
+    "horas_certificadas": 80,
+    "modalidad": "Presencial en Laboratorio",
+    "destinatarios": "Docentes Tutores y Estudiantes de Agrotécnicas",
+    "escuelas_participantes": 12,
+    "participantes_inscritos": 98,
+    "estado": "En Curso",
+    "fecha_inicio": "2026-08-01",
+    "fecha_fin": "2026-11-20",
+    "lugar": "Laboratorios EEAOC (Las Talitas - Tafí Viejo)"
+  },
+  {
+    "id": "CAP-03",
+    "titulo": "Certificación Siemens en Controladores Lógicos Programables (PLC S7-1200)",
+    "organismo": "Siemens Argentina & DETyFP Tucumán",
+    "tipo": "Multinacional Privada",
+    "horas_certificadas": 40,
+    "modalidad": "Semipresencial",
+    "destinatarios": "Docentes de Escuelas Técnicas de la Provincia",
+    "escuelas_participantes": 22,
+    "participantes_inscritos": 65,
+    "estado": "Próxima",
+    "fecha_inicio": "2026-09-20",
+    "fecha_fin": "2026-10-30",
+    "lugar": "Campus Virtual DETyFP & Lab Técnica N° 2"
+  },
+  {
+    "id": "CAP-04",
+    "titulo": "Seguridad en Operación de Maquinaria Pesada y Tornería CNC",
+    "organismo": "Superintendencia de Riesgos del Trabajo (SRT) & Scania",
+    "tipo": "Público / Privado",
+    "horas_certificadas": 30,
+    "modalidad": "Presencial en Planta",
+    "destinatarios": "Practicantes en Plantas Industriales",
+    "escuelas_participantes": 6,
+    "participantes_inscritos": 82,
+    "estado": "Completada",
+    "fecha_inicio": "2026-05-05",
+    "fecha_fin": "2026-06-15",
+    "lugar": "Planta Scania Colombres"
+  }
+]

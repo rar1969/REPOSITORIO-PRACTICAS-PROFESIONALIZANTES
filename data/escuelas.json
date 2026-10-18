@@ -1,0 +1,1114 @@
+[
+  {
+    "id": "ESC-01",
+    "cue": "9000437",
+    "nombre": "Escuela Agrotécnica Amaicha del Valle",
+    "tipo": "agrotecnica",
+    "localidad": "Amaicha del Valle",
+    "municipio": "Comuna Rural Amaicha del Valle",
+    "departamento": "Tafí del Valle",
+    "direccion": "Ruta 307 - S/N°",
+    "lat": -26.595247,
+    "lng": -65.925392,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 14
+    },
+    "alumnos_7mo": 14,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. Fidel Daniel Suarez a Cargo",
+    "telefono": "",
+    "correo": "agrotecnicaamaicha@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-02",
+    "cue": "9000997",
+    "nombre": "Escuela Agrotécnica Amalia Hernández de Castillo",
+    "tipo": "agrotecnica",
+    "localidad": "Estación Aráoz",
+    "municipio": "Comuna Rural Estación Aráoz y Tacanas",
+    "departamento": "Leales",
+    "direccion": "Ruta 327 - Km 45",
+    "lat": -27.054579,
+    "lng": -64.915613,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 26
+    },
+    "alumnos_7mo": 26,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Porf. Marcelo Sánchez",
+    "telefono": "3814986666",
+    "correo": "agrotecnicaestaraoz@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-03",
+    "cue": "9001770",
+    "nombre": "Escuela Agrotécnica Gastona Sud",
+    "tipo": "agrotecnica",
+    "localidad": "Gastona Sud",
+    "municipio": "Comuna Rural Gastona Sud",
+    "departamento": "Chicligasta",
+    "direccion": "Ruta 328 - Km 8,5",
+    "lat": -27.351792,
+    "lng": -65.500105,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 11
+    },
+    "alumnos_7mo": 11,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Prof. Roberto López",
+    "telefono": "",
+    "correo": "agrotecgastonasud@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-04",
+    "cue": "9001884",
+    "nombre": "Escuela Agrotécnica Ing. Agr. Jorge Palacios",
+    "tipo": "agrotecnica",
+    "localidad": "Famaillá",
+    "municipio": "Municipalidad Famaillá",
+    "departamento": "Famaillá",
+    "direccion": "Monseñor Ferro S/N° - Santa Clara",
+    "lat": -27.054116,
+    "lng": -65.386651,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria",
+      "Mecanización Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 32,
+      "Mecanización Agropecuaria": 0
+    },
+    "alumnos_7mo": 32,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. Florencia Benimeli",
+    "telefono": "",
+    "correo": "agrotecnicafamailla@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-05",
+    "cue": "9001934",
+    "nombre": "Escuela Agrotécnica Ing. Agr. Ludovico Tusek",
+    "tipo": "agrotecnica",
+    "localidad": "Concepción",
+    "municipio": "Municipalidad Concepción",
+    "departamento": "Chicligasta",
+    "direccion": "Ruta 65 - Km 2,5",
+    "lat": -27.34901,
+    "lng": -65.615124,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 16
+    },
+    "alumnos_7mo": 16,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Ing. Luciana Amani",
+    "telefono": "3865405655",
+    "correo": "escuelaagrotecnicaludovicotuse@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-06",
+    "cue": "9001657",
+    "nombre": "Escuela Agrotécnica Ing. Agr. Roberto Falci",
+    "tipo": "agrotecnica",
+    "localidad": "Santa Cruz",
+    "municipio": "Municipalidad Tafí del Valle",
+    "departamento": "Tafí del Valle",
+    "direccion": "Ruta 325 - Km 9,5",
+    "lat": -26.888736,
+    "lng": -65.761898,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 11
+    },
+    "alumnos_7mo": 11,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Ing. Agr. Carlos Mercado",
+    "telefono": "3865628535",
+    "correo": "ceptafi@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-07",
+    "cue": "9000956",
+    "nombre": "Escuela Agrotécnica Juan B. Alberdi",
+    "tipo": "agrotecnica",
+    "localidad": "Marapa",
+    "municipio": "Comuna Rural Marapa",
+    "departamento": "Juan Bautista Alberdi",
+    "direccion": "Ruta 308 - Km 2",
+    "lat": -27.596957,
+    "lng": -65.63183,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria",
+      "Mecanización Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 23,
+      "Mecanización Agropecuaria": 15
+    },
+    "alumnos_7mo": 38,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Juan Ignacio Cambule",
+    "telefono": "3865540825",
+    "correo": "agrotecnicaalberdi@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-08",
+    "cue": "9000469",
+    "nombre": "Escuela Agrotécnica Juan Mantovani",
+    "tipo": "agrotecnica",
+    "localidad": "Santa Ana",
+    "municipio": "Comuna Rural Santa Ana",
+    "departamento": "Río Chico",
+    "direccion": "Eva Perón S/N° - Camino Vecinal A Lote N° 17",
+    "lat": -27.472679,
+    "lng": -65.688749,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 50
+    },
+    "alumnos_7mo": 50,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Ing. Agr. Mónica Hael",
+    "telefono": "3865557312",
+    "correo": "agrotecnicasantana@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-09",
+    "cue": "9002199",
+    "nombre": "Escuela Agrotécnica los Pizarros",
+    "tipo": "agrotecnica",
+    "localidad": "Los Pizarros",
+    "municipio": "Comuna Rural los Pizarros",
+    "departamento": "La Cocha",
+    "direccion": "2 de Abril S/N° y Pasaje María Auxiliadora",
+    "lat": -27.748059,
+    "lng": -65.634699,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 29
+    },
+    "alumnos_7mo": 29,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Prof. Daniel Córdoba",
+    "telefono": "",
+    "correo": "agrotecnicalospizarros@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-10",
+    "cue": "9000054",
+    "nombre": "Escuela Agrotécnica los Sarmiento",
+    "tipo": "agrotecnica",
+    "localidad": "Los Sarmiento",
+    "municipio": "Comuna Rural los Sarmiento",
+    "departamento": "Río Chico",
+    "direccion": "9 de Julio S/N°",
+    "lat": -27.412032,
+    "lng": -65.69061,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 27
+    },
+    "alumnos_7mo": 27,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Prof. Gonzalez",
+    "telefono": "NO TIENE",
+    "correo": "agrotecnicalosarmiento@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-11",
+    "cue": "9000634",
+    "nombre": "Escuela Agrotécnica Mariano Ramos",
+    "tipo": "agrotecnica",
+    "localidad": "La Ramada",
+    "municipio": "Comuna Rural la Ramada",
+    "departamento": "Burruyacú",
+    "direccion": "24 de Septiembre S/N°",
+    "lat": -26.687221,
+    "lng": -64.946104,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 9
+    },
+    "alumnos_7mo": 9,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Orse Paula",
+    "telefono": "",
+    "correo": "agrotecnicaburruyacu@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-12",
+    "cue": "9000949",
+    "nombre": "Escuela Agrotécnica Miguel A. Torres",
+    "tipo": "agrotecnica",
+    "localidad": "Tafí del Valle",
+    "municipio": "Municipalidad Tafí del Valle",
+    "departamento": "Tafí del Valle",
+    "direccion": "Avenida General José de San Martín S/N°",
+    "lat": -26.849763,
+    "lng": -65.71057,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria",
+      "Turismo"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 36,
+      "Turismo": 16
+    },
+    "alumnos_7mo": 52,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof Enrique Pastrana",
+    "telefono": "",
+    "correo": "agrotecnicatafidelvalle@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-13",
+    "cue": "9002098",
+    "nombre": "Escuela Agrotécnica Simoca",
+    "tipo": "agrotecnica",
+    "localidad": "Simoca",
+    "municipio": "Municipalidad Simoca",
+    "departamento": "Simoca",
+    "direccion": "Belgrano S/N°",
+    "lat": -27.268062,
+    "lng": -65.359909,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 35
+    },
+    "alumnos_7mo": 35,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. David Rodriguez",
+    "telefono": "",
+    "correo": "agrotecnicasimoca@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-14",
+    "cue": "9000868",
+    "nombre": "Escuela Agrotécnica Soldado Cajal",
+    "tipo": "agrotecnica",
+    "localidad": "Las Cejas",
+    "municipio": "Comuna Rural las Cejas",
+    "departamento": "Cruz Alta",
+    "direccion": "Ruta 303 - Km 45",
+    "lat": -26.828635,
+    "lng": -64.765566,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 16
+    },
+    "alumnos_7mo": 16,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Hector A. Roldan",
+    "telefono": "",
+    "correo": "agrotecnicalascejas@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-15",
+    "cue": "9002510",
+    "nombre": "Escuela Agrotécnica Trancas",
+    "tipo": "agrotecnica",
+    "localidad": "Trancas",
+    "municipio": "Muncipalidad Trancas",
+    "departamento": "Trancas",
+    "direccion": "Lola Mora y Juan B. Justo",
+    "lat": -26.237926,
+    "lng": -65.276008,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {
+      "Producción Agropecuaria": 0
+    },
+    "alumnos_7mo": 0,
+    "circuito": "Circuito III",
+    "supervisor": "",
+    "director": "",
+    "telefono": "",
+    "correo": "",
+    "verificado": false
+  },
+  {
+    "id": "ESC-16",
+    "cue": "9000742",
+    "nombre": "Escuela Técnica Crucero Ara Gral. Belgrano",
+    "tipo": "tecnica",
+    "localidad": "Famaillá",
+    "municipio": "Municipalidad Famaillá",
+    "departamento": "Famaillá",
+    "direccion": "Ruta 301 - Km 36 - Barrio Cabildo",
+    "lat": -27.049783,
+    "lng": -65.392791,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Maestro Mayor de Obras",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Maestro Mayor de Obras": 41,
+      "Informática": 25
+    },
+    "alumnos_7mo": 66,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. Héctor Hugo Correa",
+    "telefono": "",
+    "correo": "esc_tecnica@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-17",
+    "cue": "9001729",
+    "nombre": "Escuela Técnica el Mollar",
+    "tipo": "tecnica",
+    "localidad": "El Mollar",
+    "municipio": "Comuna Rural el Mollar",
+    "departamento": "Tafí del Valle",
+    "direccion": "Calle S/N° - Barrio el Lago",
+    "lat": -26.935257,
+    "lng": -65.706512,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Maestro Mayor de Obras"
+    ],
+    "alumnos_por_especialidad": {
+      "Maestro Mayor de Obras": 11
+    },
+    "alumnos_7mo": 11,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Profe. Liliana Sisini",
+    "telefono": "",
+    "correo": "escuelatecnicaelmollar@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-18",
+    "cue": "9000341",
+    "nombre": "Escuela Técnica N° 1 Aguilares",
+    "tipo": "tecnica",
+    "localidad": "Aguilares",
+    "municipio": "Municipalidad Aguilares",
+    "departamento": "Río Chico",
+    "direccion": "Velez Sarfield N° 1200",
+    "lat": -27.430539,
+    "lng": -65.620597,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Indumentaria y Productos de Confeccion Textil",
+      "Industrias de Procesos"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 7,
+      "Indumentaria y Productos de Confeccion Textil": 7,
+      "Industrias de Procesos": 18
+    },
+    "alumnos_7mo": 32,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "DIRECTOR (LICENCIA) VAZQUEZ JOSE VICE A CARGO DIRECCION ING ARAOZ",
+    "telefono": "",
+    "correo": "enet_1aguilares@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-19",
+    "cue": "9000087",
+    "nombre": "Escuela Técnica N° 1 Bella Vista",
+    "tipo": "tecnica",
+    "localidad": "Bella Vista",
+    "municipio": "Municipalidad Bella Vista",
+    "departamento": "Leales",
+    "direccion": "Mariano Moreno N° 35",
+    "lat": -27.02815,
+    "lng": -65.308172,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Maestro Mayor de Obras",
+      "Automotores"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 29,
+      "Maestro Mayor de Obras": 24,
+      "Automotores": 5
+    },
+    "alumnos_7mo": 58,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Conrado Salto",
+    "telefono": "",
+    "correo": "tecnicabellavista@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-20",
+    "cue": "9000651",
+    "nombre": "Escuela Técnica N° 1 Concepción",
+    "tipo": "tecnica",
+    "localidad": "Concepción",
+    "municipio": "Municipalidad Concepción",
+    "departamento": "Chicligasta",
+    "direccion": "Nasif Estefano y Stewart Shipton",
+    "lat": -27.347609,
+    "lng": -65.594386,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Maestro Mayor de Obras"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 56,
+      "Maestro Mayor de Obras": 68
+    },
+    "alumnos_7mo": 124,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Prof. Favio Torres - Jefe de Taller a Cargo Direccion",
+    "telefono": "",
+    "correo": "escuelatecnicaconcepcion@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-21",
+    "cue": "9001835",
+    "nombre": "Escuela Técnica N° 1 Hilda Guerrero de Molina",
+    "tipo": "tecnica",
+    "localidad": "Santa Lucia",
+    "municipio": "Comuna Rural Santa Lucia",
+    "departamento": "Monteros",
+    "direccion": "José Hernández S/N°",
+    "lat": -27.094353,
+    "lng": -65.539552,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 21,
+      "Informática": 12
+    },
+    "alumnos_7mo": 33,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. Lino Fabian Salazar",
+    "telefono": "",
+    "correo": "esctecnicasantalucia@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-22",
+    "cue": "9000614",
+    "nombre": "Escuela Técnica N° 1 Independencia Argentina",
+    "tipo": "tecnica",
+    "localidad": "San Miguel de Tucumán",
+    "municipio": "Municipalidad San Miguel de Tucumán",
+    "departamento": "Capital",
+    "direccion": "Crisóstomo Álvarez N° 746",
+    "lat": -26.831389,
+    "lng": -65.208671,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Gestión y Administración de las Organizaciones",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Gestión y Administración de las Organizaciones": 52,
+      "Informática": 31
+    },
+    "alumnos_7mo": 83,
+    "circuito": "Circuito II",
+    "supervisor": "",
+    "director": "Ing.Claudio Fernández",
+    "telefono": "",
+    "correo": "enetindarg@gmail.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-23",
+    "cue": "9000835",
+    "nombre": "Escuela Técnica N° 1 Ing. Antonio María Correa",
+    "tipo": "tecnica",
+    "localidad": "Delfin Gallo",
+    "municipio": "Comuna Rural Delfin Gallo",
+    "departamento": "Cruz Alta",
+    "direccion": "Ruta 303 - Km 12",
+    "lat": -26.853223,
+    "lng": -65.092056,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Gestión y Administración de las Organizaciones"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 26,
+      "Gestión y Administración de las Organizaciones": 19
+    },
+    "alumnos_7mo": 45,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Isabel Castillo jefa de taller a cargo de la dirección",
+    "telefono": "",
+    "correo": "etecorrea@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-24",
+    "cue": "9000139",
+    "nombre": "Escuela Técnica N° 1 Juan B. Alberdi",
+    "tipo": "tecnica",
+    "localidad": "Juan Bautista Alberdi",
+    "municipio": "Municipalidad Juan Bautista Alberdi",
+    "departamento": "Juan Bautista Alberdi",
+    "direccion": "Catamarca N° 500",
+    "lat": -27.594069,
+    "lng": -65.622015,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 0,
+      "Informática": 0
+    },
+    "alumnos_7mo": 0,
+    "circuito": "Circuito V",
+    "supervisor": "PROF. IGNACIO RODRIGUEZ",
+    "director": "Ing. Alberto Victoria",
+    "telefono": "3865472926",
+    "correo": "tecnica1jba@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-25",
+    "cue": "9000690",
+    "nombre": "Escuela Técnica N° 1 la Cocha",
+    "tipo": "tecnica",
+    "localidad": "La Cocha",
+    "municipio": "Municipalidad la Cocha",
+    "departamento": "La Cocha",
+    "direccion": "Avenida Belgrano y Juan Bautista Alberdi",
+    "lat": -27.774217,
+    "lng": -65.586097,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Gestión y Administración de las Organizaciones",
+      "Maestro Mayor de Obras",
+      "Turismo"
+    ],
+    "alumnos_por_especialidad": {
+      "Gestión y Administración de las Organizaciones": 28,
+      "Maestro Mayor de Obras": 28,
+      "Turismo": 14
+    },
+    "alumnos_7mo": 70,
+    "circuito": "Circuito V",
+    "supervisor": "",
+    "director": "Prof. Ana Herrera",
+    "telefono": "NO TIENE",
+    "correo": "tecnicalacocha@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-26",
+    "cue": "9000864",
+    "nombre": "Escuela Técnica N° 1 Lastenia",
+    "tipo": "tecnica",
+    "localidad": "Lastenia",
+    "municipio": "Municipalidad Banda del Río Salí",
+    "departamento": "Cruz Alta",
+    "direccion": "17 de Agosto N° 640",
+    "lat": -26.865351,
+    "lng": -65.161195,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Medio Ambiente"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 20,
+      "Medio Ambiente": 11
+    },
+    "alumnos_7mo": 31,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Marcelo Salina",
+    "telefono": "",
+    "correo": "tecnicalastenia@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-27",
+    "cue": "9000392",
+    "nombre": "Escuela Técnica N° 1 Lules",
+    "tipo": "tecnica",
+    "localidad": "San Isidro de Lules",
+    "municipio": "Municipalidad Lules",
+    "departamento": "Lules",
+    "direccion": "Teniente Auviex y Pasaje Mendoza",
+    "lat": -26.929076,
+    "lng": -65.336368,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Electrónica",
+      "Química"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 0,
+      "Electrónica": 0,
+      "Química": 0
+    },
+    "alumnos_7mo": 0,
+    "circuito": "Circuito III",
+    "supervisor": "",
+    "director": "Prof. Picco Roque - Jefe de Taller a cargo de la Direccion",
+    "telefono": "3814811590",
+    "correo": "tecnica1_lules@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-28",
+    "cue": "9000475",
+    "nombre": "Escuela Técnica N° 1 Monteros",
+    "tipo": "tecnica",
+    "localidad": "Monteros",
+    "municipio": "Municipalidad Monteros",
+    "departamento": "Monteros",
+    "direccion": "Italia Esquina Perú",
+    "lat": -27.169731,
+    "lng": -65.490317,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 50,
+      "Informática": 52
+    },
+    "alumnos_7mo": 102,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Prof. Leonardo Ovejero",
+    "telefono": "",
+    "correo": "tecnicademonteros@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-29",
+    "cue": "9000834",
+    "nombre": "Escuela Técnica N° 1 Rafael Marino",
+    "tipo": "tecnica",
+    "localidad": "Tafi Viejo",
+    "municipio": "Municipalidad Tafi Viejo",
+    "departamento": "Tafí Viejo",
+    "direccion": "Uttinger N° 856",
+    "lat": -26.730141,
+    "lng": -65.266814,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Electrónica"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 81,
+      "Electrónica": 26
+    },
+    "alumnos_7mo": 107,
+    "circuito": "Circuito III",
+    "supervisor": "",
+    "director": "Prof. Figueroa Fabian",
+    "telefono": "",
+    "correo": "tecnicatafi@yahoo.com.ar tecnica1rafaelmarino@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-30",
+    "cue": "9001006",
+    "nombre": "Escuela Técnica N° 1 Ranchillos",
+    "tipo": "tecnica",
+    "localidad": "Ranchillos",
+    "municipio": "Comuna Rural Ranchillos y San Miguel",
+    "departamento": "Cruz Alta",
+    "direccion": "Avenida Solano Peña S/N° Altura Ruta 302, Km 25",
+    "lat": -26.957208,
+    "lng": -65.046101,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Informática",
+      "Gestión y Administración de las Organizaciones"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 14,
+      "Informática": 13,
+      "Gestión y Administración de las Organizaciones": 42
+    },
+    "alumnos_7mo": 69,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Facundo Rodriguez",
+    "telefono": "",
+    "correo": "tecnicaranchillos@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-31",
+    "cue": "9000894",
+    "nombre": "Escuela Técnica N° 1 Río Seco",
+    "tipo": "tecnica",
+    "localidad": "Río Seco",
+    "municipio": "Comuna Rural Río Seco",
+    "departamento": "Monteros",
+    "direccion": "Avenida Himno Patrio S/N°",
+    "lat": -27.275744,
+    "lng": -65.562198,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electrónica",
+      "Industrias de Procesos"
+    ],
+    "alumnos_por_especialidad": {
+      "Electrónica": 28,
+      "Industrias de Procesos": 18
+    },
+    "alumnos_7mo": 46,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "Ing. Sara Hael",
+    "telefono": "",
+    "correo": "esmichars@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-32",
+    "cue": "9000655",
+    "nombre": "Escuela Técnica N° 1 Trancas",
+    "tipo": "tecnica",
+    "localidad": "Villa de Trancas",
+    "municipio": "Municipalidad Trancas",
+    "departamento": "Trancas",
+    "direccion": "Ex Ruta 9 - Km 4",
+    "lat": -26.237994,
+    "lng": -65.274324,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Mecanización Agropecuaria",
+      "Gestión y Administración de las Organizaciones"
+    ],
+    "alumnos_por_especialidad": {
+      "Mecanización Agropecuaria": 40,
+      "Gestión y Administración de las Organizaciones": 13
+    },
+    "alumnos_7mo": 53,
+    "circuito": "Circuito III",
+    "supervisor": "",
+    "director": "Prof. Juan Flores",
+    "telefono": "",
+    "correo": "tecnica_trancas@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-33",
+    "cue": "9000668",
+    "nombre": "Escuela Técnica N° 1 Villa de Leales",
+    "tipo": "tecnica",
+    "localidad": "Villa de Leales",
+    "municipio": "Comuna Rural Villa de Leales",
+    "departamento": "Leales",
+    "direccion": "Joaquín Brizuela y Venecia",
+    "lat": -27.191683,
+    "lng": -65.310634,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Gestión y Administración de las Organizaciones"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 21,
+      "Gestión y Administración de las Organizaciones": 18
+    },
+    "alumnos_7mo": 39,
+    "circuito": "Circuito I",
+    "supervisor": "",
+    "director": "Prof. Héctor Miguel Severo",
+    "telefono": "",
+    "correo": "tecnicavillaleales@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-34",
+    "cue": "9000552",
+    "nombre": "Escuela Técnica N° 2 Obispo Colombres",
+    "tipo": "tecnica",
+    "localidad": "San Miguel de Tucumán",
+    "municipio": "Municipalidad San Miguel de Tucumán",
+    "departamento": "Capital",
+    "direccion": "Domingo Garcia N° 47",
+    "lat": -26.836581,
+    "lng": -65.197635,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Automotores",
+      "Electrónica"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 65,
+      "Automotores": 46,
+      "Electrónica": 56
+    },
+    "alumnos_7mo": 167,
+    "circuito": "Circuito II",
+    "supervisor": "",
+    "director": "Elias Juarez - Regente a Cargo",
+    "telefono": "",
+    "correo": "tecnica2obispocolombres@gmail.com",
+    "verificado": false
+  },
+  {
+    "id": "ESC-35",
+    "cue": "9002046",
+    "nombre": "Escuela Técnica N° 2 Tafí Viejo Lomas de Tafí",
+    "tipo": "tecnica",
+    "localidad": "Lomas de Tafí",
+    "municipio": "Municipalidad Tafi Viejo",
+    "departamento": "Tafí Viejo",
+    "direccion": "Juan Valdéz N° 150",
+    "lat": -26.783403,
+    "lng": -65.244737,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Tecnología de los Alimentos"
+    ],
+    "alumnos_por_especialidad": {
+      "Tecnología de los Alimentos": 24
+    },
+    "alumnos_7mo": 24,
+    "circuito": "Circuito III",
+    "supervisor": "",
+    "director": "profe Bruno Ruiz",
+    "telefono": "",
+    "correo": "tecnica2lomas@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-36",
+    "cue": "9000805",
+    "nombre": "Escuela Técnica N° 3 Juan B. Terán",
+    "tipo": "tecnica",
+    "localidad": "San Miguel de Tucumán",
+    "municipio": "Municipalidad San Miguel de Tucumán",
+    "departamento": "Capital",
+    "direccion": "Avenida Bartolomé Mitre N° 746",
+    "lat": -26.817777,
+    "lng": -65.216262,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Maestro Mayor de Obras"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 79,
+      "Maestro Mayor de Obras": 37
+    },
+    "alumnos_7mo": 116,
+    "circuito": "Circuito II",
+    "supervisor": "",
+    "director": "Prof. Miguel Garrido",
+    "telefono": "",
+    "correo": "etec_juanbteran@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-37",
+    "cue": "9001774",
+    "nombre": "Escuela Técnica N° 4 Juan Xxiii",
+    "tipo": "tecnica",
+    "localidad": "San Miguel de Tucumán",
+    "municipio": "Municipalidad San Miguel de Tucumán",
+    "departamento": "Capital",
+    "direccion": "Bolivia N° 220",
+    "lat": -26.807163,
+    "lng": -65.226513,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Informática": 6
+    },
+    "alumnos_7mo": 6,
+    "circuito": "Circuito II",
+    "supervisor": "",
+    "director": "Prof. Manuel Romano",
+    "telefono": "",
+    "correo": "escuela@tecnica4tucuman.edu.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-38",
+    "cue": "9000380",
+    "nombre": "Escuela Técnica N° 5",
+    "tipo": "tecnica",
+    "localidad": "San Miguel de Tucumán",
+    "municipio": "Municipalidad San Miguel de Tucumán",
+    "departamento": "Capital",
+    "direccion": "Patricias Argentinas N° 383",
+    "lat": -26.815117,
+    "lng": -65.25529,
+    "precision": "domicilio",
+    "fuente_datos": "DETyFP · Oferta Educativa",
+    "especialidades": [
+      "Electromecánica",
+      "Maestro Mayor de Obras",
+      "Informática"
+    ],
+    "alumnos_por_especialidad": {
+      "Electromecánica": 23,
+      "Maestro Mayor de Obras": 13,
+      "Informática": 51
+    },
+    "alumnos_7mo": 87,
+    "circuito": "Circuito II",
+    "supervisor": "",
+    "director": "Prof. Cristhian Romano",
+    "telefono": "",
+    "correo": "tecnica5capital@yahoo.com.ar",
+    "verificado": false
+  },
+  {
+    "id": "ESC-39",
+    "cue": "",
+    "nombre": "Escuela Agrotécnica N° 1 de Monteros",
+    "tipo": "agrotecnica",
+    "localidad": "Monteros",
+    "municipio": "",
+    "departamento": "Monteros",
+    "direccion": "España 698",
+    "lat": -27.169113,
+    "lng": -65.501803,
+    "precision": "localidad",
+    "fuente_datos": "edificio de la Escuela Ibatín (padrón nacional)",
+    "especialidades": [
+      "Producción Agropecuaria"
+    ],
+    "alumnos_por_especialidad": {},
+    "alumnos_7mo": null,
+    "circuito": "Circuito IV",
+    "supervisor": "",
+    "director": "",
+    "telefono": "",
+    "correo": "",
+    "verificado": false,
+    "observaciones": "Creación reciente, no figura en la Oferta Educativa. Funciona en dependencias de la Escuela Ibatín (CUE 9000515); dirección y coordenada tomadas de ese edificio. Falta el CUE propio y la matrícula."
+  }
+]

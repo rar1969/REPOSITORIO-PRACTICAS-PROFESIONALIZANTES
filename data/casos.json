@@ -1,0 +1,42 @@
+[
+  {
+    "id": "CASO-TUC-001",
+    "titulo": "Banco de Ensayos Mecánicos y Soldadura Robotizada para Cajas de Cambio",
+    "escuela": "Escuela Técnica N° 1 'Independencia'",
+    "localidad": "San Miguel de Tucumán",
+    "departamento": "Capital",
+    "especialidad": "Electromecánica y Automotores",
+    "empresa": "Scania Argentina S.A. - Planta Tucumán",
+    "cantidad_estudiantes": 8,
+    "duración": "240 Horas Reloj",
+    "problematica": "Necesidad de validar tolerancias micrométricas en brazos de cambio de engranajes previo al ensamblado final de exportación.",
+    "actividades": "Calibración de instrumentos metrológicos de precisión, verificación CNC y programación de brazo robótico de inspección visual.",
+    "competencias": "Metrología avanzada, lectura de planos industriales ISO/DIN, control de calidad bajo norma automotive IATF 16949.",
+    "resultados": "Desarrollo de un dispositivo de prueba que redujo en un 20% el tiempo de control en la línea de producción.",
+    "testimonio_estudiante": "\"Hacer nuestra práctica en Scania nos cambió la visión. Aplicamos neumática, electricidad y soldadura en el nivel máximo exigido por la industria internacional.\"",
+    "testimonio_empresa": "\"Los alumnos de la Técnica 1 demostraron un nivel formativo sobresaliente. Dos de los practicantes ya fueron incorporados al plantel profesional.\"",
+    "imagen_url": "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80",
+    "video_url": "https://youtube.com",
+    "destacado": true
+  },
+  {
+    "id": "CASO-TUC-002",
+    "titulo": "Monitoreo por Sensores IoT y Riego Inteligente en Vivero Citrícola",
+    "escuela": "Escuela Técnica N° 1 'Rafael Marino'",
+    "localidad": "Tafí Viejo",
+    "departamento": "Tafí Viejo",
+    "especialidad": "Informática y Agropecuaria",
+    "empresa": "Citrusvil S.A. - Grupo Lucci",
+    "cantidad_estudiantes": 6,
+    "duración": "200 Horas Reloj",
+    "problematica": "Optimización de humedad de suelo y temperatura en micro-túneles de germinación de plantas madre de limón sin virus.",
+    "actividades": "Desarrollo de un sistema embebido con microcontroladores ESP32, sensores de suelo capacitive y panel solar fotovoltaico con telemetría en tiempo real.",
+    "competencias": "Programación C++, electrónica digital, agrotecnología (AgTech), redes inalámbricas LoRaWAN.",
+    "resultados": "Reducción del 30% en el consumo hídrico del vivero y alertas automáticas por SMS ante heladas invernales.",
+    "testimonio_estudiante": "\"Unir la informática con el campo tucumano fue una meta increíble. Ver que nuestro circuito toma decisiones de riego solo es una satisfacción enorme.\"",
+    "testimonio_empresa": "\"La solución aportada por la Escuela Técnica de Tafí Viejo resolvió un problema real de telemetría a bajo costo.\"",
+    "imagen_url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    "video_url": "https://youtube.com",
+    "destacado": true
+  }
+]
