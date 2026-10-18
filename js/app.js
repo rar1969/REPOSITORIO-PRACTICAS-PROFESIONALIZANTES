@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!elements.selectAluEscuela) return;
 
     let html = `<option value="">Seleccionar Escuela de Tucumán...</option>`;
-    window.PORTAL_DATA.escuelas.forEach(esc => {
+        window.PORTAL_DATA.escuelas.forEach(esc => {
       html += `<option value="${esc.nombre}">${esc.nombre} (${esc.localidad})</option>`;
     });
     elements.selectAluEscuela.innerHTML = html;
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. Marcadores de las 38 Escuelas Técnicas y Agrotécnicas
-    window.PORTAL_DATA.escuelas.forEach(esc => {
+     window.PORTAL_DATA.escuelas.filter(esc => esc.lat !== null && esc.lng !== null).forEach(esc => {
       const marker = L.marker([esc.lat, esc.lng], { icon: schoolIcon }).addTo(AppState.leafletMap);
       
       const popupContent = `
