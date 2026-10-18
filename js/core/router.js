@@ -25,8 +25,17 @@ let activo = null;          // { modulo, contenedor } montado ahora
 let navegando = false;      // evita el ida y vuelta entre clic y hashchange
 let contexto = null;
 
+/**
+ * La URL es `#/<vista>?<parámetros>`. Los parámetros son del módulo: el
+ * ruteador solo los transporta. Sirven para que un filtro aplicado se pueda
+ * compartir —`#/directorio?dept=Monteros`— que es como circula hoy la
+ * información entre las escuelas de la red.
+ */
 const idDesdeHash = () =>
-  (location.hash.replace(/^#\/?/, '').split('/')[0] || RUTA_POR_DEFECTO).trim();
+  (location.hash.replace(/^#\/?/, '').split('?')[0].split('/')[0] || RUTA_POR_DEFECTO).trim();
+
+const paramsDesdeHash = () =>
+  new URLSearchParams(location.hash.includes('?') ? location.hash.split('?')[1] : '');
 
 const seccionDe = id => document.getElementById(`view-${id}`);
 const botonDe = id => document.querySelector(`.nav-btn[data-view="${id}"]`);
@@ -36,15 +45,41 @@ const hayLegado = () => Boolean(document.querySelector('.nav-btn[data-view]')) &
 
 /* ------------------------------------------------------------- navegación */
 
-/** Cambia de vista. Es la única forma de navegar: todo lo demás llama acá. */
-export function ir(id) {
+/**
+ * Cambia de vista. Es la única forma de navegar: todo lo demás llama acá.
+ * `params` es un objeto plano; los valores vacíos no se escriben en la URL.
+ */
+export function ir(id, params) {
   const destino = id || RUTA_POR_DEFECTO;
-  if (location.hash !== `#/${destino}`) {
+  const hash = `#/${destino}${consulta(params)}`;
+  if (location.hash !== hash) {
     navegando = true;
-    location.hash = `#/${destino}`;
+    location.hash = hash;
     navegando = false;
   }
   mostrar(destino);
+}
+
+function consulta(params) {
+  const busqueda = new URLSearchParams();
+  for (const [clave, valor] of Object.entries(params || {})) {
+    if (valor !== '' && valor !== null && valor !== undefined) busqueda.set(clave, valor);
+  }
+  const texto = busqueda.toString();
+  return texto ? `?${texto}` : '';
+}
+
+/**
+ * Reescribe los parámetros de la vista abierta sin volver a montarla. Lo usa
+ * un módulo cuando cambia un filtro: la URL queda compartible y el historial
+ * del navegador guarda el paso, pero la vista no parpadea.
+ */
+export function actualizarParams(params) {
+  const hash = `#/${idDesdeHash()}${consulta(params)}`;
+  if (location.hash === hash) return;
+  navegando = true;
+  location.hash = hash;
+  navegando = false;
 }
 
 async function mostrar(id) {
@@ -89,7 +124,7 @@ async function mostrar(id) {
   }
 
   try {
-    await modulo.montar(contenedor, contexto);
+    await modulo.montar(contenedor, { ...contexto, params: paramsDesdeHash() });
     activo = { modulo, contenedor };
   } catch (error) {
     console.error(`[router] Error al montar "${id}".`, error);
@@ -101,7 +136,7 @@ async function mostrar(id) {
 /* ---------------------------------------------------------------- arranque */
 
 export function iniciar(ctx) {
-  contexto = { ...ctx, ir };
+  contexto = { ...ctx, ir, actualizarParams };
 
   window.addEventListener('hashchange', () => {
     if (!navegando) mostrar(idDesdeHash());
@@ -118,6 +153,9 @@ export function iniciar(ctx) {
     navegando = false;
     mostrar(id);
   });
+
+  // Un módulo puede pedir que se abra una vista, con o sin filtros aplicados.
+  escuchar('ir', ({ vista, params } = {}) => ir(vista, params));
 
   // Un rol que pierde permiso sobre la vista abierta vuelve al inicio.
   escuchar('rol:cambiado', rol => {

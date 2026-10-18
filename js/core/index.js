@@ -12,10 +12,11 @@ import { emitir, escuchar } from './bus.js';
 import { iniciar as iniciarRouter, ir } from './router.js';
 
 // Los módulos ya migrados. Los que faltan siguen dentro de app.js.
+import directorio from '../modules/directorio/index.js';
 import casos from '../modules/casos/index.js';
 import capacitaciones from '../modules/capacitaciones/index.js';
 
-const MODULOS = [casos, capacitaciones];
+const MODULOS = [directorio, casos, capacitaciones];
 
 export async function iniciar() {
   for (const modulo of MODULOS) registrar(modulo);
@@ -24,6 +25,15 @@ export async function iniciar() {
   iniciarRouter(ctx);
 
   // Respuestas a eventos que todavía no tienen módulo propio.
+
+  // La ficha del oferente sigue siendo del app.js heredado. El módulo no lo
+  // sabe: emite el evento y el puente decide quién lo atiende. Cuando exista
+  // modules/oferente, se cambia acá y el directorio no se entera.
+  escuchar('oferente:ver', id => {
+    if (typeof window.viewOferenteDetail === 'function') window.viewOferenteDetail(id);
+    else console.warn(`[core] Nadie atiende la ficha del oferente ${id}.`);
+  });
+
   escuchar('caso:replicar', id => {
     emitir('aviso', {
       texto: 'Pedido registrado. La DETyFP te contacta para replicar la experiencia.',

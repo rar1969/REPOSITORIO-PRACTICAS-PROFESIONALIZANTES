@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
           <p style="font-size: 0.75rem; color: #334155; margin-bottom: 0.5rem;">
             <strong>Especialidades:</strong> ${esc.especialidades.join(', ')}<br>
-            <strong>Alumnos de 7°:</strong> ${esc.alumnos_7mo ?? 's/d'} alumnos 
+            <strong>Matrícula Prácticas:</strong> ${esc.estudiantes} alumnos
           </p>
         </div>
       `;
@@ -929,14 +929,53 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-    if (elements.btnSearchHero) {
+  if (elements.filterSearch) {
+    elements.filterSearch.addEventListener('input', (e) => {
+      AppState.oferentesFilter.search = e.target.value;
+      renderOferentes();
+    });
+  }
+
+  if (elements.filterSpec) {
+    elements.filterSpec.addEventListener('change', (e) => {
+      AppState.oferentesFilter.especialidad = e.target.value;
+      renderOferentes();
+    });
+  }
+
+  if (elements.filterDept) {
+    elements.filterDept.addEventListener('change', (e) => {
+      AppState.oferentesFilter.departamento = e.target.value;
+      renderOferentes();
+    });
+  }
+
+  if (elements.filterStatus) {
+    elements.filterStatus.addEventListener('change', (e) => {
+      AppState.oferentesFilter.estado = e.target.value;
+      renderOferentes();
+    });
+  }
+
+  if (elements.btnResetFilters) {
+    elements.btnResetFilters.addEventListener('click', () => {
+      AppState.oferentesFilter = { search: '', especialidad: '', departamento: '', estado: '' };
+      if (elements.filterSearch) elements.filterSearch.value = '';
+      if (elements.filterSpec) elements.filterSpec.value = '';
+      if (elements.filterDept) elements.filterDept.value = '';
+      if (elements.filterStatus) elements.filterStatus.value = '';
+      renderOferentes();
+    });
+  }
+
+  if (elements.btnSearchHero) {
     elements.btnSearchHero.addEventListener('click', () => {
-      const q = elements.inputSearchHero ? elements.inputSearchHero.value : '';
-      const esp = elements.selectSpecHero ? elements.selectSpecHero.value : '';
-      const params = new URLSearchParams();
-      if (q) params.set('q', q);
-      if (esp) params.set('esp', esp);
-      location.hash = `#/directorio${params.toString() ? '?' + params : ''}`;
+      if (elements.inputSearchHero) AppState.oferentesFilter.search = elements.inputSearchHero.value;
+      if (elements.selectSpecHero) AppState.oferentesFilter.especialidad = elements.selectSpecHero.value;
+      if (elements.filterSearch) elements.filterSearch.value = AppState.oferentesFilter.search;
+      if (elements.filterSpec) elements.filterSpec.value = AppState.oferentesFilter.especialidad;
+      switchView('directorio');
+      renderOferentes();
     });
   }
 
@@ -960,6 +999,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   populateSpecialtyDropdowns();
   populateSchoolSelects();
+  renderOferentes();
   renderRepositorio();
   renderCasosExitosos();
   renderCapacitaciones();
