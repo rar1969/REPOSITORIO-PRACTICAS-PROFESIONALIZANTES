@@ -129,10 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    if (viewId === 'mapa') {
-      setTimeout(() => initMap(), 150);
-    }
-    
+        
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -340,97 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. MAPA CARTOGRÁFICO DE LAS 38 ESCUELAS Y OFERENTES EN TUCUMÁN
   // --------------------------------------------------------------------------
 
-  function initMap() {
-    const mapContainer = document.getElementById('map-container');
-    if (!mapContainer || AppState.leafletMap) return;
-
-    AppState.leafletMap = L.map('map-container').setView([-26.9000, -65.3500], 9.5);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | DETyFP Tucumán'
-    }).addTo(AppState.leafletMap);
-
-    // 1. Iconos Personalizados para Escuelas y Empresas
-    const schoolIcon = L.divIcon({
-      className: 'custom-map-icon school-icon',
-      html: `<div style="background: #0284c7; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid white;"><i class="fas fa-graduation-cap"></i></div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
-
-    const companyIcon = L.divIcon({
-      className: 'custom-map-icon company-icon',
-      html: `<div style="background: #0f172a; color: #38bdf8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #38bdf8;"><i class="fas fa-industry"></i></div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
-
-    // 2. Marcadores de las 38 Escuelas Técnicas y Agrotécnicas
-    window.PORTAL_DATA.escuelas.forEach(esc => {
-      const marker = L.marker([esc.lat, esc.lng], { icon: schoolIcon }).addTo(AppState.leafletMap);
-      
-      const popupContent = `
-        <div style="font-family: var(--font-sans); padding: 0.2rem; max-width: 250px;">
-          <span style="background: #e0f2fe; color: #0369a1; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.3rem;">ESCUELA TÉCNICA ETP</span>
-          <h4 style="margin-bottom: 0.25rem; font-size: 0.95rem; color: #0f172a; font-weight: 700;">${esc.nombre}</h4>
-          <p style="margin-bottom: 0.4rem; font-size: 0.8rem; color: #475569;">
-            <i class="fas fa-location-dot" style="color: #0284c7;"></i> ${esc.localidad} (Dpto. ${esc.departamento})<br>
-            <i class="fas fa-barcode"></i> CUE: ${esc.cue}
-          </p>
-          <p style="font-size: 0.75rem; color: #334155; margin-bottom: 0.5rem;">
-            <strong>Especialidades:</strong> ${esc.especialidades.join(', ')}<br>
-            <strong>Matrícula Prácticas:</strong> ${esc.estudiantes} alumnos
-          </p>
-        </div>
-      `;
-      marker.bindPopup(popupContent);
-      AppState.schoolMarkers.push(marker);
-    });
-
-    // 3. Marcadores de Empresas Oferentes
-    window.PORTAL_DATA.oferentes.forEach(item => {
-      const marker = L.marker([item.latitud, item.longitud], { icon: companyIcon }).addTo(AppState.leafletMap);
-      
-      const popupContent = `
-        <div style="font-family: var(--font-sans); padding: 0.2rem; max-width: 250px;">
-          <span style="background: #fef3c7; color: #d97706; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.3rem;">EMPRESA OFERENTE</span>
-          <h4 style="margin-bottom: 0.25rem; font-size: 0.95rem; color: #0f172a; font-weight: 700;">${item.razon_social}</h4>
-          <p style="margin-bottom: 0.4rem; font-size: 0.8rem; color: #475569;">
-            <i class="fas fa-location-dot"></i> ${item.localidad} (Dpto. ${item.departamento})<br>
-            <i class="fas fa-briefcase"></i> ${item.especialidades.join(', ')}
-          </p>
-          <div style="background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem; margin-bottom: 0.5rem;">
-            ${item.cupos_disponibles} Cupos Disponibles
-          </div>
-          <button onclick="window.viewOferenteDetail('${item.id}')" style="background: #0284c7; color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; width: 100%;">
-            Ver Ficha Completa
-          </button>
-        </div>
-      `;
-      marker.bindPopup(popupContent);
-      AppState.companyMarkers.push(marker);
-    });
-  }
-
-  window.setMapFilter = function(mode) {
-    AppState.mapFilterMode = mode;
-    
-    document.querySelectorAll('#map-filter-all, #map-filter-escuelas, #map-filter-empresas').forEach(b => b.classList.remove('active'));
-    document.getElementById(`map-filter-${mode}`).classList.add('active');
-
-    if (!AppState.leafletMap) return;
-
-    AppState.schoolMarkers.forEach(m => {
-      if (mode === 'all' || mode === 'escuelas') AppState.leafletMap.addLayer(m);
-      else AppState.leafletMap.removeLayer(m);
-    });
-
-    AppState.companyMarkers.forEach(m => {
-      if (mode === 'all' || mode === 'empresas') AppState.leafletMap.addLayer(m);
-      else AppState.leafletMap.removeLayer(m);
-    });
-  };
-
+  
+  
   // --------------------------------------------------------------------------
   // 6. REPOSITORIO PEDAGÓGICO
   // --------------------------------------------------------------------------
