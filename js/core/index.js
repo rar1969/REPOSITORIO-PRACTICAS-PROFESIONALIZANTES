@@ -13,10 +13,11 @@ import { iniciar as iniciarRouter, ir } from './router.js';
 
 // Los módulos ya migrados. Los que faltan siguen dentro de app.js.
 import directorio from '../modules/directorio/index.js';
+import mapa from '../modules/mapa/index.js';
 import casos from '../modules/casos/index.js';
 import capacitaciones from '../modules/capacitaciones/index.js';
 
-const MODULOS = [directorio, casos, capacitaciones];
+const MODULOS = [directorio, mapa, casos, capacitaciones];
 
 export async function iniciar() {
   for (const modulo of MODULOS) registrar(modulo);

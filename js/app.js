@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
           <p style="font-size: 0.75rem; color: #334155; margin-bottom: 0.5rem;">
             <strong>Especialidades:</strong> ${esc.especialidades.join(', ')}<br>
-            <strong>Alumnos de 7°:</strong> ${esc.alumnos_7mo ?? 's/d'} alumnos
+            <strong>Matrícula Prácticas:</strong> ${esc.estudiantes} alumnos
           </p>
         </div>
       `;
