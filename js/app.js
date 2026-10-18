@@ -343,77 +343,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6. REPOSITORIO PEDAGÓGICO
   // --------------------------------------------------------------------------
 
-  function renderRepositorio() {
-    if (!elements.docList) return;
-
-    const isAdmin = AppState.currentRole === 'Administrador Provincial';
-
-    const filteredDocs = window.PORTAL_DATA.documentos.filter(doc => {
-      const matchCat = AppState.repoCategory === 'Todos' || doc.categoria === AppState.repoCategory;
-      const matchSearch = !AppState.repoSearch || 
-        doc.titulo.toLowerCase().includes(AppState.repoSearch.toLowerCase()) ||
-        doc.descripcion.toLowerCase().includes(AppState.repoSearch.toLowerCase());
-      return matchCat && matchSearch;
-    });
-
-    if (filteredDocs.length === 0) {
-      elements.docList.innerHTML = `
-        <div style="text-align: center; padding: 3rem; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-          <i class="fas fa-folder-open" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-          <h3>No se encontraron documentos en esta categoría</h3>
-          <p style="color: var(--text-muted);">Prueba seleccionar otra categoría o cambiar la palabra clave.</p>
-        </div>
-      `;
-      return;
-    }
-
-    elements.docList.innerHTML = filteredDocs.map(doc => `
-      <div class="doc-item">
-        <div class="doc-icon ${doc.tipo_archivo.toLowerCase()}">
-          <i class="fas fa-file-${doc.tipo_archivo.toLowerCase() === 'pdf' ? 'pdf' : doc.tipo_archivo.toLowerCase() === 'xlsx' ? 'excel' : 'word'}"></i>
-        </div>
-        <div class="doc-meta">
-          <h4>${doc.titulo}</h4>
-          <p>${doc.descripcion}</p>
-          <div class="doc-tags">
-            <span><i class="fas fa-tag"></i> ${doc.categoria}</span>
-            <span><i class="fas fa-building-columns"></i> ${doc.organismo}</span>
-            <span><i class="fas fa-clock"></i> v${doc.version} (${doc.fecha})</span>
-            <span><i class="fas fa-download"></i> ${doc.descargas} descargas</span>
-          </div>
-        </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
-          <button class="doc-action-btn" onclick="window.downloadRealDocument('${doc.id}')">
-            <i class="fas fa-download"></i> Descargar (${doc.tamaño})
-          </button>
-          ${isAdmin ? `
-            <button class="doc-action-btn" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;" onclick="window.deleteDocument('${doc.id}')" title="Eliminar documento del repositorio">
-              <i class="fas fa-trash"></i> Eliminar
-            </button>
-          ` : ''}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  window.deleteDocument = function(docId) {
-    const docIndex = window.PORTAL_DATA.documentos.findIndex(d => d.id === docId);
-    if (docIndex !== -1) {
-      const docName = window.PORTAL_DATA.documentos[docIndex].titulo;
-      window.PORTAL_DATA.documentos.splice(docIndex, 1);
-      renderRepositorio();
-      renderAdminPanel();
-      showToast(`Documento <strong>"${docName}"</strong> eliminado del repositorio.`, 'info');
-    }
-  };
-
+ 
+ 
   window.downloadRealDocument = function(docId) {
     const doc = window.PORTAL_DATA.documentos.find(d => d.id === docId);
     if (!doc) return;
 
-    doc.descargas++;
-    renderRepositorio();
-
+    
     if (doc.fileUrl) {
       const a = document.createElement('a');
       a.href = doc.fileUrl;
@@ -846,22 +782,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (q) params.set('q', q);
       if (esp) params.set('esp', esp);
       location.hash = `#/directorio${params.toString() ? '?' + params : ''}`;
-    });
-  }
-
-  elements.catChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      elements.catChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      AppState.repoCategory = chip.dataset.cat;
-      renderRepositorio();
-    });
-  });
-
-  if (elements.searchRepo) {
-    elements.searchRepo.addEventListener('input', (e) => {
-      AppState.repoSearch = e.target.value;
-      renderRepositorio();
     });
   }
 
