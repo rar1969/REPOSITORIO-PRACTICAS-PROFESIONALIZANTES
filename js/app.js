@@ -1001,7 +1001,5 @@ document.addEventListener('DOMContentLoaded', () => {
   populateSchoolSelects();
   renderOferentes();
   renderRepositorio();
-  renderCasosExitosos();
-  renderCapacitaciones();
   renderAdminPanel();
 });
