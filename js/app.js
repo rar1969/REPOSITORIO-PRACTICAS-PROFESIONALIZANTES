@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       populateSpecialtyDropdowns();
-      renderOferentes();
+      
       closeModal(elements.modalEditarSpec);
       showToast(`Especialidad renombra de <strong>"${oldName}"</strong> a <strong>"${newName}"</strong>.`, 'success');
     });
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.deleteSpecialty = function(index) {
     const deleted = window.PORTAL_DATA.especialidades.splice(index, 1);
     populateSpecialtyDropdowns();
-    renderOferentes();
+    
     showToast(`Especialidad <strong>"${deleted[0]}"</strong> eliminada.`, 'info');
   };
 
@@ -263,76 +263,12 @@ document.addEventListener('DOMContentLoaded', () => {
       window.PORTAL_DATA.especialidades.push(newName);
       elements.newSpecName.value = '';
       populateSpecialtyDropdowns();
-      renderOferentes();
+      
       showToast(`¡Nueva especialidad <strong>"${newName}"</strong> incorporada exitosamente!`, 'success');
     });
   }
 
-  // --------------------------------------------------------------------------
-  // 4. DIRECTORIO DE OFERENTES
-  // --------------------------------------------------------------------------
-
-  function renderOferentes() {
-    if (!elements.gridOferentes) return;
-
-    const filtered = window.PORTAL_DATA.oferentes.filter(item => {
-      const matchSearch = !AppState.oferentesFilter.search || 
-        item.razon_social.toLowerCase().includes(AppState.oferentesFilter.search.toLowerCase()) ||
-        item.perfiles_requeridos.toLowerCase().includes(AppState.oferentesFilter.search.toLowerCase());
-
-      const matchSpec = !AppState.oferentesFilter.especialidad || 
-        item.especialidades.includes(AppState.oferentesFilter.especialidad);
-
-      const matchDept = !AppState.oferentesFilter.departamento || 
-        item.departamento === AppState.oferentesFilter.departamento;
-
-      const matchStatus = !AppState.oferentesFilter.estado || 
-        item.estado === AppState.oferentesFilter.estado;
-
-      return matchSearch && matchSpec && matchDept && matchStatus;
-    });
-
-    if (filtered.length === 0) {
-      elements.gridOferentes.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-          <i class="fas fa-building-circle-exclamation" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-          <h3>No se encontraron oferentes en Tucumán con los filtros seleccionados</h3>
-          <p style="color: var(--text-muted);">Intenta seleccionar otro departamento o limpia los criterios de búsqueda.</p>
-        </div>
-      `;
-      return;
-    }
-
-    elements.gridOferentes.innerHTML = filtered.map(item => `
-      <div class="card-oferente">
-        <div class="card-top">
-          <span class="org-type-badge">${item.tipo_organizacion}</span>
-          <span class="status-badge ${item.estado}">
-            <i class="fas fa-circle" style="font-size: 0.5rem;"></i> Convenio ${item.convenio_vigente ? 'Vigente' : 'En trámite'}
-          </span>
-        </div>
-        <div class="card-title">
-          <h3>${item.razon_social}</h3>
-          <div class="card-location">
-            <i class="fas fa-location-dot"></i> ${item.localidad}, Dpto. ${item.departamento}
-          </div>
-        </div>
-        <div class="specialties-tags">
-          ${item.especialidades.map(spec => `<span class="tag-spec"><i class="fas fa-wrench" style="font-size: 0.65rem;"></i> ${spec}</span>`).join('')}
-        </div>
-        <div class="card-details">
-          <span><i class="fas fa-users"></i> Vacantes: <strong class="cupos-highlight">${item.cupos_disponibles} cupos</strong></span>
-          <span><i class="fas fa-calendar"></i> Act: ${item.fecha_actualizacion}</span>
-        </div>
-        <div class="card-actions">
-          <button class="btn-card" onclick="window.viewOferenteDetail('${item.id}')">
-            <i class="fas fa-circle-info"></i> Ver Ficha Completa
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
+  
   // --------------------------------------------------------------------------
   // 5. MAPA CARTOGRÁFICO DE LAS 38 ESCUELAS Y OFERENTES EN TUCUMÁN
   // --------------------------------------------------------------------------
