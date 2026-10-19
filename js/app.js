@@ -789,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   populateSpecialtyDropdowns();
   populateSchoolSelects();
-  renderRepositorio();
   renderAdminPanel();
+ 
+  window.renderAdminPanel = renderAdminPanel;
 });
