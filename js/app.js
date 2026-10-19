@@ -328,34 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. SITUACIÓN DE CAPACITACIONES EN ORGANISMOS PÚBLICOS Y PRIVADOS
   // --------------------------------------------------------------------------
 
-  function renderCapacitaciones() {
-    if (!elements.gridCapacitaciones) return;
-
-    elements.gridCapacitaciones.innerHTML = window.PORTAL_DATA.capacitaciones.map(cap => `
-      <div class="card-caso" style="padding: 1.5rem; justify-content: space-between;">
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-            <span class="org-type-badge">${cap.tipo}</span>
-            <span class="status-badge ${cap.estado === 'En Curso' ? 'active' : ''}">${cap.estado}</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--primary);">${cap.titulo}</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-            <i class="fas fa-building-columns"></i> <strong>Impartido por:</strong> ${cap.organismo}
-          </p>
-          <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
-            <i class="fas fa-users-gear"></i> <strong>Destinatarios:</strong> ${cap.destinatarios}
-          </p>
-          <p style="font-size: 0.85rem; margin-bottom: 0.75rem;">
-            <i class="fas fa-location-dot"></i> <strong>Lugar:</strong> ${cap.lugar}
-          </p>
-        </div>
-        <div style="border-top: 1px solid var(--border-color); padding-top: 0.75rem; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
-          <span><i class="fas fa-clock"></i> ${cap.horas_certificadas} Hs Certificadas</span>
-          <span><i class="fas fa-user-check"></i> ${cap.participantes_inscritos} Inscriptos</span>
-        </div>
-      </div>
-    `).join('');
-  }
+  
 
   // --------------------------------------------------------------------------
   // 8. PANEL DE ADMINISTRACIÓN Y NÓMINA DE ALUMNOS (DETyFP TUCUMÁN)
