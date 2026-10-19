@@ -14,10 +14,11 @@ import { iniciar as iniciarRouter, ir } from './router.js';
 // Los módulos ya migrados. Los que faltan siguen dentro de app.js.
 import directorio from '../modules/directorio/index.js';
 import mapa from '../modules/mapa/index.js';
+import repositorio from '../modules/repositorio/index.js';
 import casos from '../modules/casos/index.js';
 import capacitaciones from '../modules/capacitaciones/index.js';
 
-const MODULOS = [directorio, mapa, casos, capacitaciones];
+const MODULOS = [directorio, mapa, repositorio, casos, capacitaciones];
 
 export async function iniciar() {
   for (const modulo of MODULOS) registrar(modulo);
@@ -33,6 +34,11 @@ export async function iniciar() {
   escuchar('oferente:ver', id => {
     if (typeof window.viewOferenteDetail === 'function') window.viewOferenteDetail(id);
     else console.warn(`[core] Nadie atiende la ficha del oferente ${id}.`);
+  });
+
+  // El panel heredado muestra su propia tabla de documentos.
+  escuchar('documentos:cambiaron', () => {
+    if (typeof window.renderAdminPanel === 'function') window.renderAdminPanel();
   });
 
   escuchar('caso:replicar', id => {
