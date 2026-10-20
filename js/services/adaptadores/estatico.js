@@ -299,6 +299,13 @@ export function crearAdaptador() {
       guardarCambios(coleccion, cambios);
     },
 
+    async incrementar(coleccion, id, campo) {
+      const actual = await this.obtener(coleccion, id);
+      const nuevo = (Number(actual?.[campo]) || 0) + 1;
+      await this.actualizar(coleccion, id, { [campo]: nuevo });
+      return nuevo;
+    },
+
     /**
      * Sin almacenamiento de objetos, el archivo se conserva como URL temporal
      * de la pestaña: alcanza para previsualizar y descargar en la sesión, y se

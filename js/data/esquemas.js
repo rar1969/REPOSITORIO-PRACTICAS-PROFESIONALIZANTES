@@ -3,14 +3,22 @@
  *
  * Única fuente de verdad sobre qué colecciones existen, de qué archivo salen,
  * cómo se generan sus identificadores y sobre qué campos busca el texto libre.
- * Tanto el adaptador estático como el futuro adaptador de base de datos leen
- * de acá: agregar una colección es agregar una entrada, no tocar código.
+ * Los dos adaptadores leen de acá: agregar una colección es agregar una
+ * entrada, no tocar código.
+ *
+ * Para el adaptador de Supabase (fase 2) importan además:
+ *   arreglos  campos que en la base son text[]: un filtro sobre ellos busca
+ *             por pertenencia ("oferentes con Química entre sus especialidades")
+ *   privada   nadie la lee sin sesión; crear no puede devolver la fila creada
+ *             a quien la envió (un visitante manda una solicitud y no la ve)
+ *   columna   en las listas, la columna que guarda cada valor
  */
 
 export const ESQUEMAS = {
   especialidades: {
     archivo: 'especialidades.json',
     tipo: 'lista',            // arreglo de strings, sin identificador propio
+    columna: 'nombre',
     cacheable: true
   },
 
@@ -21,6 +29,7 @@ export const ESQUEMAS = {
     prefijo: 'ESC-',
     relleno: 2,
     buscables: ['nombre', 'localidad', 'departamento', 'direccion'],
+    arreglos: ['especialidades'],
     cacheable: true,          // cambian poco: se cachean en el cliente
     // Se genera desde data/escuelas.csv: no editar el JSON a mano.
     // node herramientas/escuelas-desde-csv.mjs --escribir
@@ -33,7 +42,8 @@ export const ESQUEMAS = {
     clave: 'id',
     prefijo: 'OFER-TUC-',
     relleno: 3,
-    buscables: ['razon_social', 'localidad', 'departamento', 'perfiles_requeridos']
+    buscables: ['razon_social', 'localidad', 'departamento', 'perfiles_requeridos'],
+    arreglos: ['especialidades', 'escuelas_vinculadas']
   },
 
   estudiantes: {
@@ -45,7 +55,8 @@ export const ESQUEMAS = {
     buscables: ['nombre', 'escuela'],
     // Datos personales de menores de edad. En fase 2 esta colección deja de
     // servirse como JSON público y pasa a requerir sesión (ver SDD §9).
-    sensible: true
+    sensible: true,
+    privada: true
   },
 
   capacitaciones: {
@@ -81,12 +92,14 @@ export const ESQUEMAS = {
     clave: 'id',
     prefijo: 'SOL-TUC-',
     relleno: 3,
-    buscables: ['titulo', 'solicitante', 'departamento']
+    buscables: ['titulo', 'solicitante', 'departamento'],
+    privada: true             // se envían desde formularios públicos; las lee la DETyFP
   },
 
   departamentos: {
     archivo: 'departamentos.json',
     tipo: 'lista',            // los 17 de Tucumán; valida filtros y altas
+    columna: 'nombre',
     cacheable: true
   }
 };

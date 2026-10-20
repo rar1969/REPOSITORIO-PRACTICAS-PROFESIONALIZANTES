@@ -694,6 +694,52 @@
     </div>
   </div>
 
+  <!-- Modal: Ingresar (solo con el adaptador de Supabase; ver js/core/sesion.js) -->
+  <div id="modal-ingresar" class="modal-backdrop">
+    <div class="modal-container" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-right-to-bracket" style="color: var(--primary);"></i> Ingresar al portal</h3>
+        <button class="close-modal-btn">&times;</button>
+      </div>
+      <form id="form-ingresar">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="ingresar-correo">Correo electrónico</label>
+          <input type="email" id="ingresar-correo" required autocomplete="username" placeholder="nombre@educacion.tucuman.gob.ar">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="ingresar-clave">Contraseña</label>
+          <input type="password" id="ingresar-clave" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-submit-form"><i class="fas fa-right-to-bracket"></i> Ingresar</button>
+        <p style="margin-top: 1rem; font-size: 0.85rem; text-align: center;">
+          <button type="button" id="btn-recuperar-clave" style="background: none; border: none; color: var(--primary); cursor: pointer; text-decoration: underline;">¿Olvidaste tu contraseña?</button>
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">Las cuentas las otorga la Dirección de Educación Técnica y Formación Profesional.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Elegir contraseña nueva (al volver desde el correo de recuperación) -->
+  <div id="modal-nueva-clave" class="modal-backdrop">
+    <div class="modal-container" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-key" style="color: var(--primary);"></i> Elegí una contraseña nueva</h3>
+        <button class="close-modal-btn">&times;</button>
+      </div>
+      <form id="form-nueva-clave">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="nueva-clave">Contraseña nueva (mínimo 8 caracteres)</label>
+          <input type="password" id="nueva-clave" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="nueva-clave-repetida">Repetila</label>
+          <input type="password" id="nueva-clave-repetida" required minlength="8" autocomplete="new-password">
+        </div>
+        <button type="submit" class="btn-submit-form"><i class="fas fa-check"></i> Guardar contraseña</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Modal: Detalle de Oferente -->
   <div id="modal-detalle" class="modal-backdrop">
     <div class="modal-container">
@@ -740,6 +786,13 @@
   <!-- Leaflet se descarga solo al abrir el mapa (js/services/geo.js). -->
 
   <!-- Aplicación: core/ monta los módulos; services/api es el único acceso a datos. -->
+  <!--
+    Origen de los datos:
+      'estatico' → archivos de data/ (demostración; lo cargado queda en este navegador)
+      'supabase' → base de datos compartida con inicio de sesión real. Requiere:
+         supabase: { url: 'https://XXXX.supabase.co', clave: 'clave pública anon' }
+    La clave "anon" es pública por diseño; NUNCA poner acá la clave service_role.
+  -->
   <script>window.PORTAL_CONFIG = { adaptador: 'estatico' };</script>
   <script type="module" src="js/main.js"></script>
 </body>

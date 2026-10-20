@@ -11,7 +11,10 @@
  * quién lo atendiera desde la limpieza de app.js, así que "Publicar documento"
  * recargaba la página y no guardaba nada.
  *
- * LÍMITE CONOCIDO, hasta la fase 2: sin almacenamiento de archivos, el archivo
+ * Con el adaptador de Supabase, el archivo se guarda en el almacenamiento de
+ * la base y el documento queda con su URL pública, para todos.
+ *
+ * En modo estático (LÍMITE CONOCIDO): sin almacenamiento de archivos, el archivo
  * subido vive solo en la pestaña donde se cargó. La ficha del documento sí se
  * guarda; el archivo, no. Por eso el registro lleva `archivo_en_sesion: true`
  * y, si alguien lo pide después de recargar, se le dice la verdad en lugar de
@@ -110,7 +113,7 @@ export default {
       throw new Error(`Formato no admitido (.${extension}). Se aceptan: ${EXTENSIONES.join(', ')}.`);
     }
 
-    const { url } = await this._ctx.api.subirArchivo('documentos', archivo);
+    const { url, efimero } = await this._ctx.api.subirArchivo('documentos', archivo);
     const valor = id => document.getElementById(id)?.value.trim() ?? '';
 
     const documento = await this._ctx.api.crear('documentos', {
@@ -119,15 +122,17 @@ export default {
       categoria: valor('upload-doc-cat'),
       version: valor('upload-doc-version'),
       tipo_archivo: extension.toUpperCase(),
-      tamaño: tamanio(archivo.size),
+      tamanio: tamanio(archivo.size),
       fecha: new Date().toISOString().slice(0, 10),
       organismo: 'Dirección de Educación Técnica y Formación Profesional',
       estado: 'Vigente',
       descargas: 0,
       nombre_archivo: archivo.name,
-      archivo_en_sesion: true
+      // Con almacenamiento real (Supabase) el archivo queda en su URL pública;
+      // en modo estático solo vive en esta pestaña.
+      ...(efimero ? { archivo_en_sesion: true } : { url })
     });
-    archivosDeLaSesion.set(documento.id, { url, nombre: archivo.name });
+    if (efimero) archivosDeLaSesion.set(documento.id, { url, nombre: archivo.name });
 
     this._ctx.emitir('documentos:cambiaron', documento);
     this._ctx.emitir('aviso', { texto: `"${documento.titulo}" publicado en el repositorio.`, tipo: 'success' });

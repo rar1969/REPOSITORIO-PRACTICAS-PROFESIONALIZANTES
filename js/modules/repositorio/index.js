@@ -126,7 +126,11 @@ export default {
   async _descargar(doc) {
     // El contador se guarda antes de bajar el archivo: si la descarga falla,
     // igual quedó registrado el pedido, que es lo que la Dirección mide.
-    await this._ctx.api.actualizar('documentos', doc.id, { descargas: (doc.descargas ?? 0) + 1 });
+    try {
+      await this._ctx.api.incrementar('documentos', doc.id, 'descargas');
+    } catch (error) {
+      console.warn('[repositorio] No se pudo contar la descarga.', error);
+    }
 
     this._ctx.emitir('documento:descargar', doc.id);
     await this._dibujar();
@@ -176,7 +180,7 @@ function fila(doc, puedeBorrar, acciones) {
 function etiquetaAccion(doc) {
   if (doc.url) return [icono('fa-arrow-up-right-from-square'), ' Abrir'];
   const tieneArchivo = doc.archivo_en_sesion || doc.url;
-  return [icono('fa-download'), ` Descargar${tieneArchivo && doc.tamaño ? ` (${doc.tamaño})` : ''}`];
+  return [icono('fa-download'), ` Descargar${tieneArchivo && doc.tamanio ? ` (${doc.tamanio})` : ''}`];
 }
 
 const etiqueta = (ico, texto) => texto ? el('span', {}, icono(ico), ` ${texto}`) : null;

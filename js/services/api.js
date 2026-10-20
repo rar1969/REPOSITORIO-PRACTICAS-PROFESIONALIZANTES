@@ -12,7 +12,8 @@
  *   api.crear(coleccion, datos)                                  → entidad creada
  *   api.actualizar(coleccion, id, cambios)                       → entidad
  *   api.eliminar(coleccion, id)                                  → void
- *   api.subirArchivo(bucket, archivo)                            → { url, tamanio }
+ *   api.subirArchivo(bucket, archivo)                            → { url, tamanio, efimero }
+ *   api.incrementar(coleccion, id, campo)                        → valor nuevo
  */
 
 const ADAPTADORES = {
@@ -104,6 +105,15 @@ export const api = {
   /** Elimina una entidad. */
   async eliminar(coleccion, id) {
     return (await adaptador()).eliminar(coleccion, id);
+  },
+
+  /**
+   * Suma 1 a un contador (hoy, las descargas de un documento). Va aparte de
+   * `actualizar` porque un visitante puede contar una descarga sin tener
+   * permiso para editar el documento.
+   */
+  async incrementar(coleccion, id, campo) {
+    return (await adaptador()).incrementar(coleccion, id, campo);
   },
 
   /** Sube un archivo y devuelve su ubicación. */

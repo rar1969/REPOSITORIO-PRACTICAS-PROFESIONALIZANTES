@@ -60,7 +60,7 @@ function tarjeta(caso, ctx) {
                          marginTop: '0.75rem', display: 'flex', justifyContent: 'space-between',
                          alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem',
                          fontSize: '0.8rem', color: 'var(--text-muted)' } },
-      el('span', {}, icono('fa-users'), ` ${caso.cantidad_estudiantes} estudiantes · ${caso.duración ?? caso.duracion ?? ''}`),
+      el('span', {}, icono('fa-users'), ` ${caso.cantidad_estudiantes} estudiantes · ${caso.duracion ?? caso.duración ?? ''}`),
       el('button', {
         class: 'nav-btn btn-primary-action',
         onclick: () => ctx.emitir('caso:replicar', caso.id)

@@ -39,7 +39,7 @@ export async function iniciar() {
   iniciarTema();
   iniciarModales();
   escuchar('aviso', ({ texto, tipo } = {}) => avisar(texto, tipo));
-  const sesion = iniciarSesion();
+  const sesion = await iniciarSesion();   // en modo supabase, espera la sesión guardada
 
   for (const modulo of MODULOS) registrar(modulo);
 

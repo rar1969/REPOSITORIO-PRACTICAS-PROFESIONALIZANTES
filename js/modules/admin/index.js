@@ -338,7 +338,7 @@ export default {
     reemplazar(tabla, items.map(doc => el('tr', {},
       el('td', {}, el('strong', {}, doc.titulo), doc.ejemplo && ' ', marcaEjemplo(doc)),
       el('td', {}, el('span', { class: 'org-type-badge' }, doc.categoria)),
-      el('td', {}, `${doc.tipo_archivo} (${doc.tamaño ?? 's/d'})`),
+      el('td', {}, `${doc.tipo_archivo} (${doc.tamanio || doc.tamaño || "s/d"})`),
       el('td', {}, doc.fecha),
       el('td', {}, boton('btn-reject', 'fa-trash', 'Eliminar', () => this._eliminarDocumento(doc),
         `Eliminar ${doc.titulo}`))
