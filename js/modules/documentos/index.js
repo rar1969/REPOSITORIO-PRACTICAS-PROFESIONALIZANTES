@@ -1,0 +1,191 @@
+/**
+ * modules/documentos — carga y descarga de archivos del repositorio.
+ *
+ * Persistente, porque el formulario "Subir documento" se abre desde dos
+ * lugares (el repositorio y el panel DETyFP) y la descarga se pide desde los
+ * dos también. Quien pide emite `documento:descargar`; este módulo atiende.
+ *
+ * Arregla una falla que estaba en producción: el formulario de carga no tenía
+ * quién lo atendiera desde la limpieza de app.js, así que "Publicar documento"
+ * recargaba la página y no guardaba nada.
+ *
+ * LÍMITE CONOCIDO, hasta la fase 2: sin almacenamiento de archivos, el archivo
+ * subido vive solo en la pestaña donde se cargó. La ficha del documento sí se
+ * guarda; el archivo, no. Por eso el registro lleva `archivo_en_sesion: true`
+ * y, si alguien lo pide después de recargar, se le dice la verdad en lugar de
+ * bajarle un enlace muerto.
+ */
+
+import { abrirModal, cerrarModal } from '../../ui/modal.js';
+
+const EXTENSIONES = ['pdf', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'zip', 'odt', 'ods'];
+const archivosDeLaSesion = new Map();   // id del documento → { url, nombre }
+
+export default {
+  id: 'documentos',
+  persistente: true,
+  titulo: 'Carga documental',
+
+  montar(_contenedor, ctx) {
+    this._ctx = ctx;
+    this._desconectar = [];
+
+    const formulario = document.getElementById('form-subir-doc');
+    const entrada = document.getElementById('upload-doc-file');
+    const zona = formulario?.querySelector('.file-dropzone');
+    const leyenda = document.getElementById('file-selected-name');
+    const leyendaOriginal = leyenda?.textContent ?? '';
+
+    const mostrarNombre = () => {
+      const archivo = entrada?.files?.[0];
+      if (leyenda) leyenda.textContent = archivo ? `${archivo.name} · ${tamanio(archivo.size)}` : leyendaOriginal;
+    };
+
+    const elegir = () => entrada?.click();
+    const conTeclado = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); elegir(); } };
+    const arrastrando = e => { e.preventDefault(); zona.classList.add('dragover'); };
+    const salio = () => zona.classList.remove('dragover');
+    const solto = e => {
+      e.preventDefault();
+      salio();
+      if (e.dataTransfer?.files?.length && entrada) {
+        entrada.files = e.dataTransfer.files;
+        mostrarNombre();
+      }
+    };
+
+    if (zona) {
+      // La zona era un <div> con `onclick` en línea: sin teclado ni nombre.
+      zona.removeAttribute('onclick');
+      zona.setAttribute('role', 'button');
+      zona.setAttribute('tabindex', '0');
+      zona.setAttribute('aria-label', 'Elegir el archivo a subir');
+      zona.addEventListener('click', elegir);
+      zona.addEventListener('keydown', conTeclado);
+      zona.addEventListener('dragover', arrastrando);
+      zona.addEventListener('dragleave', salio);
+      zona.addEventListener('drop', solto);
+      this._desconectar.push(() => {
+        zona.removeEventListener('click', elegir);
+        zona.removeEventListener('keydown', conTeclado);
+        zona.removeEventListener('dragover', arrastrando);
+        zona.removeEventListener('dragleave', salio);
+        zona.removeEventListener('drop', solto);
+      });
+    }
+    entrada?.addEventListener('change', mostrarNombre);
+
+    const enviar = async evento => {
+      evento.preventDefault();
+      try {
+        await this._publicar(entrada?.files?.[0]);
+        formulario.reset();
+        mostrarNombre();
+        cerrarModal('subir-doc');
+      } catch (error) {
+        ctx.emitir('aviso', { texto: error.message, tipo: 'error' });
+      }
+    };
+    formulario?.addEventListener('submit', enviar);
+
+    this._desconectar.push(
+      () => entrada?.removeEventListener('change', mostrarNombre),
+      () => formulario?.removeEventListener('submit', enviar),
+      ctx.escuchar('documento:descargar', id => this._descargar(id)),
+      ctx.escuchar('documento:subir', () => abrirModal('subir-doc'))
+    );
+  },
+
+  desmontar() {
+    for (const quitar of this._desconectar ?? []) quitar();
+    this._desconectar = [];
+  },
+
+  async _publicar(archivo) {
+    if (!archivo) throw new Error('Elegí el archivo que querés publicar.');
+    const extension = archivo.name.split('.').pop().toLowerCase();
+    if (!EXTENSIONES.includes(extension)) {
+      throw new Error(`Formato no admitido (.${extension}). Se aceptan: ${EXTENSIONES.join(', ')}.`);
+    }
+
+    const { url } = await this._ctx.api.subirArchivo('documentos', archivo);
+    const valor = id => document.getElementById(id)?.value.trim() ?? '';
+
+    const documento = await this._ctx.api.crear('documentos', {
+      titulo: valor('upload-doc-title'),
+      descripcion: valor('upload-doc-desc'),
+      categoria: valor('upload-doc-cat'),
+      version: valor('upload-doc-version'),
+      tipo_archivo: extension.toUpperCase(),
+      tamaño: tamanio(archivo.size),
+      fecha: new Date().toISOString().slice(0, 10),
+      organismo: 'Dirección de Educación Técnica y Formación Profesional',
+      estado: 'Vigente',
+      descargas: 0,
+      nombre_archivo: archivo.name,
+      archivo_en_sesion: true
+    });
+    archivosDeLaSesion.set(documento.id, { url, nombre: archivo.name });
+
+    this._ctx.emitir('documentos:cambiaron', documento);
+    this._ctx.emitir('aviso', { texto: `"${documento.titulo}" publicado en el repositorio.`, tipo: 'success' });
+    return documento;
+  },
+
+  async _descargar(id) {
+    const doc = await this._ctx.api.obtener('documentos', id);
+    if (!doc) return;
+
+    const enSesion = archivosDeLaSesion.get(id);
+    if (enSesion) {
+      bajar(enSesion.url, enSesion.nombre);
+      this._ctx.emitir('aviso', { texto: `Descargando ${doc.titulo}`, tipo: 'success' });
+      return;
+    }
+    if (doc.archivo_en_sesion) {
+      this._ctx.emitir('aviso', {
+        texto: 'El archivo se cargó en otra sesión y todavía no hay almacenamiento permanente (llega en la fase 2). Pedíselo a la DETyFP.',
+        tipo: 'error'
+      });
+      return;
+    }
+    if (doc.url) {
+      bajar(doc.url, doc.nombre_archivo || doc.titulo);
+      this._ctx.emitir('aviso', { texto: `Descargando ${doc.titulo}`, tipo: 'success' });
+      return;
+    }
+    // Documentos de ejemplo sin archivo detrás: se genera una ficha de texto,
+    // como hacía el prototipo, pero diciendo que es una ficha y no el original.
+    const texto = [
+      'DIRECCIÓN DE EDUCACIÓN TÉCNICA Y FORMACIÓN PROFESIONAL',
+      'MINISTERIO DE EDUCACIÓN - GOBIERNO DE TUCUMÁN',
+      '',
+      'FICHA DE REFERENCIA — el archivo original todavía no está cargado en el portal.',
+      '',
+      `Título: ${doc.titulo}`,
+      `Categoría: ${doc.categoria}`,
+      `Organismo: ${doc.organismo}`,
+      `Fecha: ${doc.fecha} · Versión: ${doc.version} · Estado: ${doc.estado}`,
+      '',
+      doc.descripcion ?? ''
+    ].join('\n');
+    const url = URL.createObjectURL(new Blob([texto], { type: 'text/plain;charset=utf-8' }));
+    bajar(url, `${doc.titulo.replace(/[^\p{L}\p{N}]+/gu, '_').slice(0, 80)}_ficha.txt`);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    this._ctx.emitir('aviso', { texto: `Ficha de "${doc.titulo}" descargada (el archivo original aún no está cargado).`, tipo: 'info' });
+  }
+};
+
+function bajar(url, nombre) {
+  const enlace = document.createElement('a');
+  enlace.href = url;
+  enlace.download = nombre;
+  document.body.append(enlace);
+  enlace.click();
+  enlace.remove();
+}
+
+function tamanio(bytes) {
+  if (bytes >= 1048576) return `${(bytes / 1048576).toFixed(1).replace('.', ',')} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}

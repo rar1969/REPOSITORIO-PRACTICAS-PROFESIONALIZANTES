@@ -1,19 +1,15 @@
 /**
  * core/router — traduce la URL a un módulo montado.
  *
- * Reemplaza a `switchView()`, pero por etapas: mientras queden vistas dentro
- * del `app.js` monolítico, el ruteador convive con él. Funciona en dos modos,
- * y el mismo código sirve para los dos:
+ * Reemplaza definitivamente a `switchView()`. Durante la migración convivió
+ * con app.js en un "modo delegado"; con la última vista migrada, ese modo
+ * desapareció y el ruteador hace todo: muestra la sección, marca el botón del
+ * menú, monta el módulo nuevo y desmonta el anterior.
  *
- *   delegado  — hay app.js. Él sigue mostrando y ocultando las secciones; el
- *               ruteador solo pone la URL y monta o desmonta los módulos ya
- *               migrados. Es el modo de hoy.
- *   propio    — no hay app.js. El ruteador hace también el mostrar/ocultar.
- *               Es el modo al que se llega cuando la última vista se migra,
- *               y no requiere tocar este archivo: se activa solo.
- *
- * Esa convivencia es lo que permite migrar una vista por vez sin dejar el
- * portal roto en el medio.
+ * La URL es `#/<vista>?<parámetros>`. Los parámetros son del módulo: el
+ * ruteador solo los transporta. Sirven para que un filtro aplicado se pueda
+ * compartir —`#/directorio?dept=Monteros`— que es como circula hoy la
+ * información entre las escuelas de la red.
  */
 
 import { obtener, visiblePara } from './registro.js';
@@ -24,13 +20,8 @@ const RUTA_POR_DEFECTO = 'inicio';
 let activo = null;          // { modulo, contenedor } montado ahora
 let navegando = false;      // evita el ida y vuelta entre clic y hashchange
 let contexto = null;
+let turno = 0;              // descarta montajes que quedaron viejos
 
-/**
- * La URL es `#/<vista>?<parámetros>`. Los parámetros son del módulo: el
- * ruteador solo los transporta. Sirven para que un filtro aplicado se pueda
- * compartir —`#/directorio?dept=Monteros`— que es como circula hoy la
- * información entre las escuelas de la red.
- */
 const idDesdeHash = () =>
   (location.hash.replace(/^#\/?/, '').split('?')[0].split('/')[0] || RUTA_POR_DEFECTO).trim();
 
@@ -38,10 +29,7 @@ const paramsDesdeHash = () =>
   new URLSearchParams(location.hash.includes('?') ? location.hash.split('?')[1] : '');
 
 const seccionDe = id => document.getElementById(`view-${id}`);
-const botonDe = id => document.querySelector(`.nav-btn[data-view="${id}"]`);
-
-/** ¿Está app.js manejando la navegación? Lo sabemos por sus botones. */
-const hayLegado = () => Boolean(document.querySelector('.nav-btn[data-view]')) && !window.PORTAL_SIN_LEGADO;
+const rolActual = () => contexto?.sesion?.rol?.() ?? 'visitante';
 
 /* ------------------------------------------------------------- navegación */
 
@@ -51,13 +39,16 @@ const hayLegado = () => Boolean(document.querySelector('.nav-btn[data-view]')) &
  */
 export function ir(id, params) {
   const destino = id || RUTA_POR_DEFECTO;
-  const hash = `#/${destino}${consulta(params)}`;
-  if (location.hash !== hash) {
-    navegando = true;
-    location.hash = hash;
-    navegando = false;
-  }
-  mostrar(destino);
+  escribirHash(`#/${destino}${consulta(params)}`);
+  return mostrar(destino, { forzar: Boolean(params) });
+}
+
+function escribirHash(hash) {
+  if (location.hash === hash) return;
+  navegando = true;
+  location.hash = hash;
+  // `hashchange` llega después; se libera la marca cuando ya pasó.
+  setTimeout(() => { navegando = false; }, 0);
 }
 
 function consulta(params) {
@@ -75,15 +66,25 @@ function consulta(params) {
  * del navegador guarda el paso, pero la vista no parpadea.
  */
 export function actualizarParams(params) {
-  const hash = `#/${idDesdeHash()}${consulta(params)}`;
-  if (location.hash === hash) return;
-  navegando = true;
-  location.hash = hash;
-  navegando = false;
+  escribirHash(`#/${idDesdeHash()}${consulta(params)}`);
 }
 
-async function mostrar(id) {
-  if (activo?.modulo.id === id) return;
+async function mostrar(idPedido, { forzar = false } = {}) {
+  let id = seccionDe(idPedido) ? idPedido : RUTA_POR_DEFECTO;
+  let modulo = obtener(id);
+  if (modulo?.persistente) modulo = null;
+
+  // Quien no tiene el rol vuelve al inicio. En el cliente es solo cosmética:
+  // la verificación de verdad llega con la sesión real (fase 2).
+  if (modulo && !visiblePara(modulo, rolActual())) {
+    emitir('aviso', { texto: `"${modulo.titulo}" requiere otro perfil de acceso.`, tipo: 'error' });
+    id = RUTA_POR_DEFECTO;
+    modulo = obtener(id);
+    escribirHash(`#/${id}`);
+  }
+
+  if (activo?.modulo.id === id && !forzar) return;
+  const miTurno = ++turno;
 
   if (activo) {
     try {
@@ -94,21 +95,18 @@ async function mostrar(id) {
     activo = null;
   }
 
-  if (hayLegado()) {
-    // app.js muestra y oculta; lo despertamos con su propio botón.
-    const boton = botonDe(id);
-    if (boton && !boton.classList.contains('active')) boton.click();
-  } else {
-    for (const seccion of document.querySelectorAll('.view-section')) {
-      seccion.style.display = seccion.id === `view-${id}` ? 'block' : 'none';
-    }
-    for (const boton of document.querySelectorAll('.nav-btn[data-view]')) {
-      boton.classList.toggle('active', boton.dataset.view === id);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  for (const seccion of document.querySelectorAll('.view-section')) {
+    seccion.style.display = seccion.id === `view-${id}` ? 'block' : 'none';
   }
+  for (const boton of document.querySelectorAll('.nav-btn[data-view]')) {
+    const actual = boton.dataset.view === id;
+    boton.classList.toggle('active', actual);
+    if (actual) boton.setAttribute('aria-current', 'page');
+    else boton.removeAttribute('aria-current');
+  }
+  if (modulo?.titulo) document.title = `${modulo.titulo} | Prácticas Profesionalizantes · DETyFP Tucumán`;
+  window.scrollTo?.({ top: 0, behavior: 'smooth' });
 
-  const modulo = obtener(id);
   if (!modulo) {
     emitir('vista:cambiada', { id, modulo: null });
     return;
@@ -124,11 +122,11 @@ async function mostrar(id) {
   }
 
   try {
-    await modulo.montar(contenedor, { ...contexto, params: paramsDesdeHash() });
     activo = { modulo, contenedor };
+    await modulo.montar(contenedor, { ...contexto, params: paramsDesdeHash() });
   } catch (error) {
     console.error(`[router] Error al montar "${id}".`, error);
-    contenedor.textContent = 'No se pudo cargar esta sección. Actualizá la página.';
+    if (miTurno === turno) contenedor.textContent = 'No se pudo cargar esta sección. Actualizá la página.';
   }
   emitir('vista:cambiada', { id, modulo });
 }
@@ -142,16 +140,12 @@ export function iniciar(ctx) {
     if (!navegando) mostrar(idDesdeHash());
   });
 
-  // Los botones del menú pasan a escribir la URL. No se cancela el clic:
-  // en modo delegado app.js sigue necesitándolo para mostrar su sección.
+  // Los botones del menú escriben la URL; el resto lo hace `mostrar`.
   document.addEventListener('click', evento => {
     const boton = evento.target.closest?.('.nav-btn[data-view]');
     if (!boton) return;
-    const id = boton.dataset.view;
-    navegando = true;
-    if (location.hash !== `#/${id}`) location.hash = `#/${id}`;
-    navegando = false;
-    mostrar(id);
+    evento.preventDefault();
+    ir(boton.dataset.view);
   });
 
   // Un módulo puede pedir que se abra una vista, con o sin filtros aplicados.
@@ -160,10 +154,10 @@ export function iniciar(ctx) {
   // Un rol que pierde permiso sobre la vista abierta vuelve al inicio.
   escuchar('rol:cambiado', rol => {
     const modulo = obtener(idDesdeHash());
-    if (modulo && !visiblePara(modulo, rol)) ir(RUTA_POR_DEFECTO);
+    if (modulo && !modulo.persistente && !visiblePara(modulo, rol)) ir(RUTA_POR_DEFECTO);
   });
 
-  mostrar(idDesdeHash());
+  return mostrar(idDesdeHash());
 }
 
 export const rutaActual = () => idDesdeHash();

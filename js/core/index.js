@@ -3,56 +3,58 @@
  *
  * Registra los módulos, arma el contexto que reciben y enciende el ruteador.
  * Es el único archivo que conoce la lista de módulos: agregar uno es agregar
- * una línea acá, y nada más.
+ * una línea acá, y nada más. Quitar uno, lo mismo —el resto del portal sigue
+ * andando sin esa opción.
  */
 
 import { api } from '../services/api.js';
-import { registrar, registrados } from './registro.js';
+import { registrar, registrados, persistentes } from './registro.js';
 import { emitir, escuchar } from './bus.js';
 import { iniciar as iniciarRouter, ir } from './router.js';
+import { iniciarSesion } from './sesion.js';
+import { iniciarModales } from '../ui/modal.js';
+import { iniciarTema } from '../ui/tema.js';
+import { avisar } from '../ui/aviso.js';
 
-// Los módulos ya migrados. Los que faltan siguen dentro de app.js.
+// Vistas: una por sección del menú.
+import inicio from '../modules/inicio/index.js';
 import directorio from '../modules/directorio/index.js';
 import mapa from '../modules/mapa/index.js';
+import capacitaciones from '../modules/capacitaciones/index.js';
 import repositorio from '../modules/repositorio/index.js';
 import casos from '../modules/casos/index.js';
-import capacitaciones from '../modules/capacitaciones/index.js';
+import admin from '../modules/admin/index.js';
 
-const MODULOS = [directorio, mapa, repositorio, casos, capacitaciones];
+// Persistentes: se abren desde cualquier vista y responden al bus.
+import solicitudes from '../modules/solicitudes/index.js';
+import oferente from '../modules/oferente/index.js';
+import documentos from '../modules/documentos/index.js';
+
+const MODULOS = [
+  inicio, directorio, mapa, capacitaciones, repositorio, casos, admin,
+  solicitudes, oferente, documentos
+];
 
 export async function iniciar() {
+  iniciarTema();
+  iniciarModales();
+  escuchar('aviso', ({ texto, tipo } = {}) => avisar(texto, tipo));
+  const sesion = iniciarSesion();
+
   for (const modulo of MODULOS) registrar(modulo);
 
-  const ctx = { api, emitir, escuchar, ir };
-  iniciarRouter(ctx);
+  const ctx = { api, emitir, escuchar, ir, sesion };
 
-  // Respuestas a eventos que todavía no tienen módulo propio.
+  // Los persistentes primero: cuando una vista emita algo, ya hay quien oiga.
+  for (const modulo of persistentes()) {
+    try {
+      await modulo.montar(document.body, ctx);
+    } catch (error) {
+      console.error(`[core] No se pudo montar "${modulo.id}".`, error);
+    }
+  }
 
-  // La ficha del oferente sigue siendo del app.js heredado. El módulo no lo
-  // sabe: emite el evento y el puente decide quién lo atiende. Cuando exista
-  // modules/oferente, se cambia acá y el directorio no se entera.
-  escuchar('oferente:ver', id => {
-    if (typeof window.viewOferenteDetail === 'function') window.viewOferenteDetail(id);
-    else console.warn(`[core] Nadie atiende la ficha del oferente ${id}.`);
-  });
-
-  // El panel heredado muestra su propia tabla de documentos.
-  escuchar('documentos:cambiaron', () => {
-    if (typeof window.renderAdminPanel === 'function') window.renderAdminPanel();
-  });
-
-  escuchar('caso:replicar', id => {
-    emitir('aviso', {
-      texto: 'Pedido registrado. La DETyFP te contacta para replicar la experiencia.',
-      tipo: 'success', referencia: id
-    });
-  });
-
-  // Puente con el `showToast` del app.js heredado, mientras exista.
-  escuchar('aviso', ({ texto, tipo }) => {
-    if (typeof window.showToast === 'function') window.showToast(texto, tipo);
-    else console.info(`[aviso] ${texto}`);
-  });
+  await iniciarRouter(ctx);
 
   console.info(`[core] ${registrados().length} módulos registrados:`,
     registrados().map(m => m.id).join(', '));

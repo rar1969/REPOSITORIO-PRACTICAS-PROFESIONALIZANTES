@@ -21,9 +21,15 @@ const modulos = new Map();   // id → módulo
  *     async montar(contenedor, ctx) {}, // ctx = { api, emitir, escuchar, ir }
  *     desmontar() {}                    // liberar oyentes, mapas, temporizadores
  *   }
+ *
+ * Un módulo `persistente: true` no tiene ruta: se monta una sola vez al
+ * arrancar y queda vivo. Es para lo que se abre desde cualquier vista —los
+ * formularios "Quiero ser oferente", la ficha de un oferente, la carga de un
+ * documento— y responde a eventos del bus, no a la URL.
  */
 export function registrar(modulo) {
-  for (const campo of ['id', 'ruta', 'montar']) {
+  const obligatorios = modulo?.persistente ? ['id', 'montar'] : ['id', 'ruta', 'montar'];
+  for (const campo of obligatorios) {
     if (!modulo?.[campo]) throw new Error(`Módulo sin "${campo}": ${JSON.stringify(modulo?.id)}`);
   }
   if (modulos.has(modulo.id)) throw new Error(`Módulo duplicado: ${modulo.id}`);
@@ -33,6 +39,7 @@ export function registrar(modulo) {
 
 export const obtener = id => modulos.get(id) ?? null;
 export const registrados = () => [...modulos.values()];
+export const persistentes = () => registrados().filter(m => m.persistente);
 export const tieneModulo = id => modulos.has(id);
 
 /** ¿Este rol puede ver este módulo? Sin `roles` declarados, lo ve cualquiera. */

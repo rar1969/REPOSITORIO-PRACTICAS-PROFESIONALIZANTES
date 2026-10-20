@@ -1,7 +1,7 @@
 /**
  * modules/repositorio — catálogo documental de la ETP.
  *
- * Última vista migrada. Lo que la distingue de las anteriores: tiene acciones
+ * Lo que la distingue de las anteriores: tiene acciones
  * que escriben (contar una descarga, eliminar un documento) y una de ellas
  * depende del rol.
  *
@@ -15,7 +15,6 @@
 import { el, icono, reemplazar } from '../../ui/dom.js';
 
 const ICONOS = { pdf: 'fa-file-pdf', xlsx: 'fa-file-excel', docx: 'fa-file-word' };
-const ROLES_QUE_BORRAN = ['administrador provincial', 'admin'];
 
 export default {
   id: 'repositorio',
@@ -39,6 +38,14 @@ export default {
 
     this._conectarCategorias();
     this._conectarBusqueda();
+
+    // Cambiar de rol muestra u oculta "Eliminar"; una carga nueva, la lista.
+    // (El app.js llamaba acá a `renderRepositorio()`, que ya no existía: el
+    // cambio de rol se cortaba con un error antes de terminar.)
+    this._desconectar.push(
+      ctx.escuchar('rol:cambiado', () => this._dibujar()),
+      ctx.escuchar('documentos:cambiaron', () => this._dibujar())
+    );
     await this._dibujar();
   },
 
@@ -107,7 +114,7 @@ export default {
       return;
     }
 
-    const puedeBorrar = ROLES_QUE_BORRAN.includes(String(this._rol()).toLowerCase());
+    const puedeBorrar = this._ctx.sesion?.esAdmin?.() ?? false;
     reemplazar(this._contenedor,
       items.map(doc => fila(doc, puedeBorrar, {
         descargar: () => this._descargar(doc),
@@ -116,21 +123,12 @@ export default {
     );
   },
 
-  /** El rol todavía sale del encabezado heredado; en fase 2, de la sesión. */
-  _rol() {
-    return document.querySelector('#role-select')?.value ?? 'Visitante';
-  },
-
   async _descargar(doc) {
     // El contador se guarda antes de bajar el archivo: si la descarga falla,
     // igual quedó registrado el pedido, que es lo que la Dirección mide.
     await this._ctx.api.actualizar('documentos', doc.id, { descargas: (doc.descargas ?? 0) + 1 });
 
-    if (typeof window.downloadRealDocument === 'function') {
-      window.downloadRealDocument(doc.id);
-    } else {
-      this._ctx.emitir('aviso', { texto: `Descargando ${doc.titulo}`, tipo: 'success' });
-    }
+    this._ctx.emitir('documento:descargar', doc.id);
     await this._dibujar();
   },
 
@@ -138,8 +136,7 @@ export default {
     if (!window.confirm(`¿Eliminar "${doc.titulo}" del repositorio?`)) return;
     await this._ctx.api.eliminar('documentos', doc.id);
     this._ctx.emitir('aviso', { texto: `"${doc.titulo}" eliminado del repositorio.`, tipo: 'info' });
-    this._ctx.emitir('documentos:cambiaron');
-    await this._dibujar();
+    this._ctx.emitir('documentos:cambiaron');   // redibuja esta lista y la del panel
   }
 };
 
