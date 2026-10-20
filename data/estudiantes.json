@@ -1,52 +1,35 @@
 [
   {
     "id": "ALU-01",
-    "dni": "45.123.890",
-    "nombre": "Mateo Carrizo",
-    "escuela": "Escuela Técnica N° 1 'Independencia'",
+    "dni": "00.000.001",
+    "nombre": "Estudiante Ejemplo A",
+    "escuela": "Escuela técnica de ejemplo",
     "especialidad": "Electromecánica",
     "curso": "7° 1ª",
     "estado": "En Práctica",
-    "empresa": "Scania Argentina S.A."
+    "empresa": "Metalmecánica Ejemplo S.R.L.",
+    "ejemplo": true
   },
   {
     "id": "ALU-02",
-    "dni": "45.987.654",
-    "nombre": "Sofia Albarracín",
-    "escuela": "Escuela Técnica N° 1 'Rafael Marino'",
-    "especialidad": "Informática",
-    "curso": "7° 2ª",
-    "estado": "En Práctica",
-    "empresa": "Citrusvil S.A."
+    "dni": "00.000.002",
+    "nombre": "Estudiante Ejemplo B",
+    "escuela": "Escuela agrotécnica de ejemplo",
+    "especialidad": "Producción Agropecuaria",
+    "curso": "7° 1ª",
+    "estado": "Asignado",
+    "empresa": "Citrícola Ejemplo S.A.",
+    "ejemplo": true
   },
   {
     "id": "ALU-03",
-    "dni": "46.234.112",
-    "nombre": "Joaquín Mansilla",
-    "escuela": "Escuela Técnica N° 1 de Monteros",
-    "especialidad": "Química",
-    "curso": "7° 1ª",
-    "estado": "En Práctica",
-    "empresa": "Arcor S.A. - La Providencia"
-  },
-  {
-    "id": "ALU-04",
-    "dni": "45.765.432",
-    "nombre": "Lucía Fernández",
-    "escuela": "Escuela Agrotécnica 'Amaicha del Valle'",
-    "especialidad": "Agropecuaria",
-    "curso": "7° 1ª",
-    "estado": "Finalizado",
-    "empresa": "EEAOC"
-  },
-  {
-    "id": "ALU-05",
-    "dni": "46.109.876",
-    "nombre": "Santiago Roldán",
-    "escuela": "Escuela Técnica N° 3 'Juan B. Terán'",
+    "dni": "00.000.003",
+    "nombre": "Estudiante Ejemplo C",
+    "escuela": "Escuela técnica de ejemplo",
     "especialidad": "Informática",
-    "curso": "7° 3ª",
-    "estado": "Asignado",
-    "empresa": "Polo Tecnológico Tucumán"
+    "curso": "7° 2ª",
+    "estado": "Finalizado",
+    "empresa": "Cooperativa de Software Ejemplo",
+    "ejemplo": true
   }
 ]

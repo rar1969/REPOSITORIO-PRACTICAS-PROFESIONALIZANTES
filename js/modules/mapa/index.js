@@ -17,7 +17,7 @@
  */
 
 import { cargarLeaflet, VISTA_TUCUMAN, TESELAS } from '../../services/geo.js';
-import { el, icono, reemplazar } from '../../ui/dom.js';
+import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 
 const CAPAS = ['todo', 'escuelas', 'oferentes'];
 
@@ -186,6 +186,7 @@ function marcadorOferente(L, oferente, ctx) {
   const globo = el('div', { style: { fontFamily: 'var(--font-sans)', padding: '.2rem', maxWidth: '260px' } },
     el('span', { class: 'org-type-badge', style: { fontSize: '.7rem', marginBottom: '.3rem', display: 'inline-block' } },
       oferente.tipo_organizacion),
+    oferente.ejemplo && ' ', marcaEjemplo(oferente),
     el('h4', { style: { margin: '0 0 .25rem', fontSize: '.95rem', fontWeight: '700' } }, oferente.razon_social),
     el('p', { style: { margin: '0 0 .4rem', fontSize: '.8rem', color: 'var(--text-muted)' } },
       icono('fa-location-dot'), ` ${oferente.localidad} (Dpto. ${oferente.departamento})`),

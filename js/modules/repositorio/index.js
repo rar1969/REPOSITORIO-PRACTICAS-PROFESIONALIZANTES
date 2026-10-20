@@ -12,7 +12,7 @@
  * Acá el selector es `.repo-categories .cat-chip`, acotado al módulo.
  */
 
-import { el, icono, reemplazar } from '../../ui/dom.js';
+import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 
 const ICONOS = { pdf: 'fa-file-pdf', xlsx: 'fa-file-excel', docx: 'fa-file-word' };
 
@@ -149,7 +149,7 @@ function fila(doc, puedeBorrar, acciones) {
     el('div', { class: `doc-icon ${tipo}` }, icono(ICONOS[tipo] ?? 'fa-file')),
 
     el('div', { class: 'doc-meta' },
-      el('h4', {}, doc.titulo),
+      el('h4', {}, doc.titulo, doc.ejemplo && ' ', marcaEjemplo(doc)),
       el('p', {}, doc.descripcion),
       el('div', { class: 'doc-tags' },
         etiqueta('fa-tag', doc.categoria),
@@ -161,7 +161,7 @@ function fila(doc, puedeBorrar, acciones) {
 
     el('div', { style: { display: 'flex', gap: '0.5rem', alignItems: 'center' } },
       el('button', { class: 'doc-action-btn', onclick: acciones.descargar },
-        icono('fa-download'), ` Descargar${doc.tamaño ? ` (${doc.tamaño})` : ''}`),
+        ...etiquetaAccion(doc)),
 
       puedeBorrar && el('button', {
         class: 'doc-action-btn',
@@ -171,6 +171,12 @@ function fila(doc, puedeBorrar, acciones) {
       }, icono('fa-trash'), ' Eliminar')
     )
   );
+}
+
+function etiquetaAccion(doc) {
+  if (doc.url) return [icono('fa-arrow-up-right-from-square'), ' Abrir'];
+  const tieneArchivo = doc.archivo_en_sesion || doc.url;
+  return [icono('fa-download'), ` Descargar${tieneArchivo && doc.tamaño ? ` (${doc.tamaño})` : ''}`];
 }
 
 const etiqueta = (ico, texto) => texto ? el('span', {}, icono(ico), ` ${texto}`) : null;

@@ -21,7 +21,7 @@
  * hasta la fase 2 (SDD §9).
  */
 
-import { el, icono, reemplazar } from '../../ui/dom.js';
+import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 import { abrirModal, cerrarModal } from '../../ui/modal.js';
 
 const SOLAPAS = ['solicitudes', 'especialidades', 'alumnos', 'capacitaciones', 'documentos'];
@@ -131,7 +131,7 @@ export default {
     reemplazar(tabla, pendientes.map(sol => el('tr', {},
       el('td', {}, el('strong', {}, sol.id)),
       el('td', {}, el('span', { class: 'org-type-badge' }, TIPOS_SOLICITUD[sol.tipo] ?? sol.tipo)),
-      el('td', {}, sol.titulo, el('br'),
+      el('td', {}, sol.titulo, sol.ejemplo && ' ', marcaEjemplo(sol), el('br'),
         el('small', { style: { color: 'var(--text-muted)' } },
           [sol.solicitante, sol.correo, sol.cuit && `CUIT ${sol.cuit}`].filter(Boolean).join(' · ')),
         sol.detalles && el('details', { style: { marginTop: '0.25rem', fontSize: '0.8rem' } },
@@ -270,7 +270,7 @@ export default {
     }
     reemplazar(tabla, alumnos.items.map(a => el('tr', {},
       el('td', {}, el('strong', {}, a.dni)),
-      el('td', {}, a.nombre, el('br'), el('small', { style: { color: 'var(--text-muted)' } }, a.curso ?? '')),
+      el('td', {}, a.nombre, a.ejemplo && ' ', marcaEjemplo(a), el('br'), el('small', { style: { color: 'var(--text-muted)' } }, a.curso ?? '')),
       el('td', {}, a.escuela),
       el('td', {}, el('span', { class: 'tag-spec' }, a.especialidad)),
       el('td', {}, el('span', { class: `status-badge ${a.estado === 'En Práctica' ? 'active' : ''}` }, a.estado)),
@@ -315,7 +315,7 @@ export default {
       el('tbody', {}, items.length === 0
         ? filaVacia(columnas.length, 'No hay capacitaciones cargadas.')
         : items.map(c => el('tr', {},
-            el('td', {}, el('strong', {}, c.titulo)),
+            el('td', {}, el('strong', {}, c.titulo), c.ejemplo && ' ', marcaEjemplo(c)),
             el('td', {}, c.organismo),
             el('td', {}, el('span', { class: 'org-type-badge' }, c.tipo)),
             el('td', {}, `${c.horas_certificadas} h`),
@@ -336,7 +336,7 @@ export default {
       return;
     }
     reemplazar(tabla, items.map(doc => el('tr', {},
-      el('td', {}, el('strong', {}, doc.titulo)),
+      el('td', {}, el('strong', {}, doc.titulo), doc.ejemplo && ' ', marcaEjemplo(doc)),
       el('td', {}, el('span', { class: 'org-type-badge' }, doc.categoria)),
       el('td', {}, `${doc.tipo_archivo} (${doc.tamaño ?? 's/d'})`),
       el('td', {}, doc.fecha),

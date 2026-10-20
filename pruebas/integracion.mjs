@@ -42,6 +42,8 @@ window.scrollTo = () => {};
 window.matchMedia = () => ({ matches: false });
 window.HTMLElement.prototype.scrollIntoView = () => {};
 window.confirm = () => true;
+const abiertos = [];
+window.open = url => { abiertos.push(url); return null; };
 let descargas = 0;
 window.HTMLAnchorElement.prototype.click = function () { if (this.download) descargas++; };
 globalThis.URL.createObjectURL = () => 'blob:prueba';
@@ -92,24 +94,27 @@ ok(`KPI escuelas = ${escuelas.length}, desde los datos`, $('#kpi-escuelas').text
 const suma7 = escuelas.reduce((s, e) => s + (e.alumnos_7mo || 0), 0);
 ok(`KPI estudiantes = matrícula de 7° (${suma7.toLocaleString('es-AR')})`,
   $('#kpi-estudiantes').textContent === suma7.toLocaleString('es-AR'));
-ok(`KPI casos = ${casos.length}, no 52`, $('#kpi-casos').textContent === String(casos.length));
-ok('KPI oferentes cuenta los activos', $('#kpi-empresas').textContent ===
-  String(oferentes.filter(o => o.estado === 'activo').length));
+ok('KPI oferentes cuenta los activos reales, sin los de ejemplo', $('#kpi-empresas').textContent ===
+  String(oferentes.filter(o => o.estado === 'activo' && !o.ejemplo).length));
+ok(`KPI casos no cuenta los de ejemplo`, $('#kpi-casos').textContent === String(casos.filter(c => !c.ejemplo).length));
+ok('la portada explica qué son los registros de ejemplo', Boolean($('#aviso-ejemplos')));
 ok('el buscador trae las 14 especialidades', $('#spec-hero').options.length === 15);
 ok('el Panel DETyFP está oculto para visitantes', $('#nav-btn-admin').style.display === 'none');
 
 console.log('\nBuscador → directorio');
-$('#search-hero').value = 'bioetanol';
+$('#search-hero').value = 'tornería';
 await clic($('#btn-search-hero'), 80);
-ok('navega a #/directorio?q=bioetanol', window.location.hash === '#/directorio?q=bioetanol' && visible('directorio'));
-ok('filtra: aparece solo el ingenio', $$('#grid-oferentes .card-oferente').length === 1 &&
-  $('#grid-oferentes').textContent.includes('Providencia'));
-ok('el filtro de texto quedó escrito', $('#filter-search').value === 'bioetanol');
+ok('navega al directorio con la búsqueda en la URL', window.location.hash.startsWith('#/directorio?q=') && visible('directorio'));
+ok('filtra: aparece solo la metalmecánica', $$('#grid-oferentes .card-oferente').length === 1 &&
+  $('#grid-oferentes').textContent.includes('Metalmecánica Ejemplo'));
+ok('la tarjeta lleva la insignia EJEMPLO', Boolean($('#grid-oferentes .marca-ejemplo')));
+ok('el filtro de texto quedó escrito', $('#filter-search').value === 'tornería');
 
 console.log('\nFicha del oferente (módulo persistente)');
 await clic($('#grid-oferentes .btn-card'));
 ok('abre la ficha en el modal', $('#modal-detalle').classList.contains('active') &&
-  $('#modal-detalle-content').textContent.includes('Providencia'));
+  $('#modal-detalle-content').textContent.includes('Metalmecánica Ejemplo') &&
+  $('#modal-detalle-content').textContent.includes('Registro de ejemplo'));
 const antesVinc = (await api.listar('solicitudes', { porPagina: 0 })).total;
 await clic([...$$('#modal-detalle-content button')].find(b => b.textContent.includes('vinculación')));
 const solTras = (await api.listar('solicitudes', { porPagina: 0 })).items;
@@ -122,6 +127,8 @@ await clic($('[data-view=casos]'));
 ok('el menú lleva a #/casos', window.location.hash === '#/casos' && visible('casos'));
 ok('solo una sección visible a la vez', $$('.view-section').filter(s => s.style.display === 'block').length === 1);
 ok(`dibuja ${casos.length} casos`, $$('#grid-casos .card-caso').length === casos.length);
+ok('ningún caso nombra a una empresa real del prototipo',
+  !/Scania|Citrusvil|Arcor|Quilmes|Lucci/.test($('#grid-casos').textContent));
 await clic([...$$('#grid-casos button')].find(b => b.textContent.includes('replicar')), 80);
 ok('el botón de réplica abre su formulario con el caso', $('#modal-replica').classList.contains('active') &&
   $('#replica-caso-nombre').value.includes(casos[0].titulo));
@@ -167,6 +174,7 @@ ok(`la bandeja lista las ${pendientes} pendientes`, $$('#admin-queue-table tr').
 ok('el contador de la solapa coincide', $('[data-admin-tab=solicitudes] .contador-pendientes').textContent === String(pendientes));
 
 const filaQuilmes = $$('#admin-queue-table tr').find(tr => tr.textContent.includes('SOL-TUC-101'));
+ok('la solicitud de ejemplo está marcada', Boolean(filaQuilmes.querySelector('.marca-ejemplo')));
 await clic(filaQuilmes.querySelector('.btn-approve'), 80);
 const quilmes = await api.obtener('solicitudes', 'SOL-TUC-101');
 ok('aprobar no borra: deja estado, fecha de cierre y responsable',
@@ -221,8 +229,11 @@ ok(`lista ${docs.length} documentos`, $$('#doc-list .doc-item').length === docs.
 ok('como admin, ofrece eliminar', $$('#doc-list .doc-item').every(d => d.textContent.includes('Eliminar')));
 ok('el botón "Subir documento" se ve', $('#btn-admin-subir-doc').style.display === 'inline-flex');
 await clic($('#doc-list .doc-action-btn'), 80);
-ok('descargar suma una descarga', (await api.obtener('documentos', docs[0].id)).descargas === (docs[0].descargas ?? 0) + 1);
-ok('y entrega un archivo', descargas === 1);
+ok('abrir la ley suma una consulta', (await api.obtener('documentos', docs[0].id)).descargas === (docs[0].descargas ?? 0) + 1);
+ok('y abre la fuente oficial en otra pestaña', abiertos[0] === docs[0].url);
+const botonModelo = $$('#doc-list .doc-item').find(d => d.textContent.includes('convenio marco')).querySelector('.doc-action-btn');
+await clic(botonModelo, 80);
+ok('un modelo sin archivo no fabrica un documento falso', descargas === 0 && ultimoAviso().includes('todavía no está cargado'));
 
 await clic($('#btn-admin-subir-doc'));
 ok('abre la carga', $('#modal-subir-doc').classList.contains('active'));

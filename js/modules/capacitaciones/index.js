@@ -6,7 +6,7 @@
  * También estaba sin dibujar, por el mismo error de `app.js`.
  */
 
-import { el, icono, reemplazar, vacio } from '../../ui/dom.js';
+import { el, icono, reemplazar, vacio, marcaEjemplo } from '../../ui/dom.js';
 
 const ORDEN_ESTADO = { 'En Curso': 0, 'Próxima': 1, 'Completada': 2 };
 
@@ -42,7 +42,8 @@ function tarjeta(cap) {
     el('div', {},
       el('div', { style: { display: 'flex', justifyContent: 'space-between',
                            alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.75rem' } },
-        el('span', { class: 'org-type-badge' }, cap.tipo),
+        el('span', { style: { display: 'flex', gap: '0.35rem', flexWrap: 'wrap' } },
+          el('span', { class: 'org-type-badge' }, cap.tipo), marcaEjemplo(cap)),
         el('span', { class: `status-badge ${cap.estado === 'En Curso' ? 'active' : ''}` }, cap.estado)
       ),
       el('h3', { style: { fontSize: '1.15rem', marginBottom: '0.5rem', color: 'var(--primary)' } },

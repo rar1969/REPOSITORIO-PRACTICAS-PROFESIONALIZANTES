@@ -52,19 +52,23 @@ const septimo = todas.reduce((t, e) => t + (e.alumnos_7mo || 0), 0);
 ok(`matrícula de 7mo cargada (${septimo})`, septimo > 1000);
 
 console.log('\nEscritura');
+// Las cuentas salen del archivo de origen: cambiar los datos no rompe la prueba.
+const origen = (await api.listar('oferentes', { porPagina: 0 })).items;
+const cuposOriginales = origen[0].cupos_disponibles;
+const siguiente = `OFER-TUC-${String(origen.length + 1).padStart(3, '0')}`;
 const nuevo = await api.crear('oferentes', { razon_social: 'Prueba S.A.', departamento: 'Capital' });
-ok(`identificador correlativo (${nuevo.id})`, nuevo.id === 'OFER-TUC-006');
+ok(`identificador correlativo (${nuevo.id})`, nuevo.id === siguiente);
 await api.actualizar('oferentes', 'OFER-TUC-001', { cupos_disponibles: 99 });
 ok('modificación sobre dato de origen', (await api.obtener('oferentes', 'OFER-TUC-001')).cupos_disponibles === 99);
 await api.eliminar('oferentes', nuevo.id);
 ok('baja de lo creado', (await api.obtener('oferentes', nuevo.id)) === null);
 await api.eliminar('oferentes', 'OFER-TUC-002');
-ok('baja de dato de origen', (await api.listar('oferentes', { porPagina: 0 })).total === 4);
+ok('baja de dato de origen', (await api.listar('oferentes', { porPagina: 0 })).total === origen.length - 1);
 
 console.log('\nRestablecer');
 await api.restablecer();
-ok('vuelve a 5 oferentes', (await api.listar('oferentes', { porPagina: 0 })).total === 5);
-ok('vuelve el valor original', (await api.obtener('oferentes', 'OFER-TUC-001')).cupos_disponibles === 12);
+ok(`vuelve a ${origen.length} oferentes`, (await api.listar('oferentes', { porPagina: 0 })).total === origen.length);
+ok('vuelve el valor original', (await api.obtener('oferentes', 'OFER-TUC-001')).cupos_disponibles === cuposOriginales);
 
 console.log(fallas === 0 ? '\nTodo en orden.\n' : `\n${fallas} prueba(s) con falla.\n`);
 process.exit(fallas === 0 ? 0 : 1);

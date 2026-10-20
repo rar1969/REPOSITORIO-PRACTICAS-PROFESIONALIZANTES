@@ -15,7 +15,7 @@
  *      HTML estaban escritas a mano, y les faltaba Juan Bautista Alberdi.
  */
 
-import { el, icono, reemplazar, vacio } from '../../ui/dom.js';
+import { el, icono, reemplazar, vacio, marcaEjemplo } from '../../ui/dom.js';
 import { conectarFiltros } from '../../ui/filtros.js';
 
 const POR_PAGINA = 12;
@@ -116,7 +116,8 @@ function tarjeta(oferente, ctx) {
 
   return el('article', { class: 'card-oferente' },
     el('div', { class: 'card-top' },
-      el('span', { class: 'org-type-badge' }, oferente.tipo_organizacion),
+      el('span', { style: { display: 'flex', gap: '0.35rem', flexWrap: 'wrap', alignItems: 'center' } },
+        el('span', { class: 'org-type-badge' }, oferente.tipo_organizacion), marcaEjemplo(oferente)),
       el('span', { class: `status-badge ${oferente.estado}` },
         icono('fa-circle'), ` Convenio ${vigente ? 'vigente' : 'en trámite'}`)
     ),

@@ -24,6 +24,14 @@ const ADAPTADORES = {
 const config = (typeof window !== 'undefined' && window.PORTAL_CONFIG) || {};
 const NOMBRE_ADAPTADOR = config.adaptador || 'estatico';
 
+/**
+ * `ocultarEjemplos: true` en PORTAL_CONFIG saca de toda lectura los registros
+ * marcados `ejemplo: true`. Se filtra acá y no en cada módulo, así vale igual
+ * para cualquier adaptador.
+ */
+const OCULTAR_EJEMPLOS = Boolean(config.ocultarEjemplos);
+const esEjemplo = item => Boolean(item && typeof item === 'object' && item.ejemplo);
+
 let adaptadorPrometido = null;
 
 function adaptador() {
@@ -58,12 +66,29 @@ export const api = {
    * @returns {Promise<{items: Array, total: number, pagina: number, porPagina: number}>}
    */
   async listar(coleccion, opciones = {}) {
-    return (await adaptador()).listar(coleccion, opciones);
+    const a = await adaptador();
+    if (!OCULTAR_EJEMPLOS) return a.listar(coleccion, opciones);
+
+    // Se pide todo, se filtra y se pagina después, para que el total sea real.
+    const { items } = await a.listar(coleccion, { ...opciones, pagina: 1, porPagina: 0 });
+    const reales = items.filter(i => !esEjemplo(i));
+    const porPagina = opciones.porPagina ?? 20;
+    const pagina = opciones.pagina ?? 1;
+    return {
+      items: porPagina === 0 ? reales : reales.slice((pagina - 1) * porPagina, pagina * porPagina),
+      total: reales.length, pagina, porPagina
+    };
+  },
+
+  /** ¿Se están ocultando los registros de ejemplo? */
+  get ocultaEjemplos() {
+    return OCULTAR_EJEMPLOS;
   },
 
   /** Devuelve una entidad por su identificador, o null si no existe. */
   async obtener(coleccion, id) {
-    return (await adaptador()).obtener(coleccion, id);
+    const item = await (await adaptador()).obtener(coleccion, id);
+    return OCULTAR_EJEMPLOS && esEjemplo(item) ? null : item;
   },
 
   /** Crea una entidad; el adaptador asigna el identificador si no viene. */

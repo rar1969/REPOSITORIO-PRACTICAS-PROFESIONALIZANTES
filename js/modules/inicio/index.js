@@ -13,7 +13,7 @@
  * dimensionar cuántos cupos hacen falta.
  */
 
-import { reemplazar } from '../../ui/dom.js';
+import { el, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 
 const formato = new Intl.NumberFormat('es-AR');
 
@@ -85,6 +85,7 @@ export default {
     poner('#kpi-escuelas', kpi.escuelas, 'Escuelas Técnicas y Agrotécnicas');
     poner('#kpi-estudiantes', kpi.alumnos7mo, 'Estudiantes de 7° año');
     poner('#kpi-casos', kpi.casos, 'Casos exitosos publicados');
+    avisoEjemplos(kpi.ejemplos);
   }
 };
 
@@ -98,11 +99,15 @@ export async function calcularIndicadores(api) {
     api.listar('escuelas', { porPagina: 0 }),
     api.listar('casos', { porPagina: 0 })
   ]);
+  // Los registros de ejemplo se ven en las listas, marcados, pero no suman:
+  // un indicador solo cuenta lo que existe.
+  const reales = lista => lista.filter(i => !i.ejemplo);
   return {
-    oferentes: oferentes.items.filter(o => String(o.estado).toLowerCase() === 'activo').length,
-    escuelas: escuelas.total ?? escuelas.items.length,
-    alumnos7mo: escuelas.items.reduce((suma, e) => suma + (Number(e.alumnos_7mo) || 0), 0),
-    casos: casos.total ?? casos.items.length
+    oferentes: reales(oferentes.items).filter(o => String(o.estado).toLowerCase() === 'activo').length,
+    escuelas: reales(escuelas.items).length,
+    alumnos7mo: reales(escuelas.items).reduce((suma, e) => suma + (Number(e.alumnos_7mo) || 0), 0),
+    casos: reales(casos.items).length,
+    ejemplos: [...oferentes.items, ...casos.items].filter(i => i.ejemplo).length
   };
 }
 
@@ -112,4 +117,19 @@ function poner(selector, valor, leyenda) {
   reemplazar(cifra, formato.format(valor));
   const texto = cifra.parentElement?.querySelector('p');
   if (texto) texto.textContent = leyenda;
+}
+
+/** Explica, debajo de los indicadores, por qué hay registros marcados. */
+function avisoEjemplos(cantidad) {
+  const grilla = document.querySelector('#view-inicio .stats-grid');
+  if (!grilla) return;
+  document.getElementById('aviso-ejemplos')?.remove();
+  if (!cantidad) return;
+  grilla.after(el('p', {
+      id: 'aviso-ejemplos', role: 'note',
+      style: { maxWidth: '900px', margin: '1.25rem auto 0', padding: '0 1rem', textAlign: 'center',
+               fontSize: '0.85rem', color: 'var(--text-muted)' } },
+    marcaEjemplo({ ejemplo: true }),
+    ' El portal está en etapa de carga. Los oferentes, casos y documentos marcados como ejemplo ',
+    'son ilustrativos y no se cuentan en estos indicadores.'));
 }

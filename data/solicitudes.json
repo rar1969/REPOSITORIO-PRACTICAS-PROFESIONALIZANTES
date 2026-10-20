@@ -2,13 +2,14 @@
   {
     "id": "SOL-TUC-101",
     "tipo": "oferente",
-    "titulo": "Cervecería & Maltería Quilmes - Planta Acheral",
-    "solicitante": "Ing. Rodrigo Silva",
-    "correo": "rsilva@quilmes.com.ar",
-    "departamento": "Monteros",
-    "especialidad": "Electromecánica / Química",
-    "fecha": "2026-09-05",
+    "titulo": "Panificadora Ejemplo S.A.",
+    "solicitante": "Responsable de planta (ejemplo)",
+    "correo": "contacto@ejemplo.com",
+    "departamento": "Lules",
+    "especialidad": "Tecnología de los Alimentos",
+    "fecha": "2026-10-20",
     "estado": "Pendiente",
-    "detalles": "Empresa cervecera con planta automatizada. Ofrece 8 cupos para alumnos de ETP en mantenimiento de embotellado y laboratorio."
+    "detalles": "Solicitud de ejemplo para probar la bandeja. Ofrece 4 cupos en control de calidad.",
+    "ejemplo": true
   }
 ]

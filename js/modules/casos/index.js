@@ -7,7 +7,7 @@
  * así que la grilla nunca se dibujó.
  */
 
-import { el, icono, reemplazar, vacio } from '../../ui/dom.js';
+import { el, icono, reemplazar, vacio, marcaEjemplo } from '../../ui/dom.js';
 
 export default {
   id: 'casos',
@@ -35,7 +35,8 @@ function tarjeta(caso, ctx) {
   return el('article', { class: 'card-caso', style: { padding: '1.5rem' } },
     el('div', { style: { display: 'flex', justifyContent: 'space-between',
                          alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.75rem' } },
-      el('span', { class: 'org-type-badge' }, caso.especialidad),
+      el('span', { style: { display: 'flex', gap: '0.35rem', flexWrap: 'wrap' } },
+        el('span', { class: 'org-type-badge' }, caso.especialidad), marcaEjemplo(caso)),
       caso.destacado && el('span', { class: 'status-badge active' }, 'Destacado')
     ),
 

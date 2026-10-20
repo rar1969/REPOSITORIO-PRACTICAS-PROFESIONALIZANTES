@@ -88,11 +88,6 @@ export const ESQUEMAS = {
     archivo: 'departamentos.json',
     tipo: 'lista',            // los 17 de Tucumán; valida filtros y altas
     cacheable: true
-  },
-
-  metricas: {
-    archivo: 'metricas.json',
-    tipo: 'objeto'            // valor único, no es una colección
   }
 };
 

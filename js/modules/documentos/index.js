@@ -4,6 +4,8 @@
  * Persistente, porque el formulario "Subir documento" se abre desde dos
  * lugares (el repositorio y el panel DETyFP) y la descarga se pide desde los
  * dos también. Quien pide emite `documento:descargar`; este módulo atiende.
+ * Un documento puede ser un archivo subido o un enlace a la fuente oficial
+ * (`url`), como la Ley 26.058 en el sitio de normativa nacional.
  *
  * Arregla una falla que estaba en producción: el formulario de carga no tenía
  * quién lo atendiera desde la limpieza de app.js, así que "Publicar documento"
@@ -150,29 +152,17 @@ export default {
       return;
     }
     if (doc.url) {
-      bajar(doc.url, doc.nombre_archivo || doc.titulo);
-      this._ctx.emitir('aviso', { texto: `Descargando ${doc.titulo}`, tipo: 'success' });
+      // Un enlace externo (normativa oficial) se abre en otra pestaña:
+      // copiarlo al portal duplicaría una fuente que ya es pública.
+      window.open(doc.url, '_blank', 'noopener');
       return;
     }
-    // Documentos de ejemplo sin archivo detrás: se genera una ficha de texto,
-    // como hacía el prototipo, pero diciendo que es una ficha y no el original.
-    const texto = [
-      'DIRECCIÓN DE EDUCACIÓN TÉCNICA Y FORMACIÓN PROFESIONAL',
-      'MINISTERIO DE EDUCACIÓN - GOBIERNO DE TUCUMÁN',
-      '',
-      'FICHA DE REFERENCIA — el archivo original todavía no está cargado en el portal.',
-      '',
-      `Título: ${doc.titulo}`,
-      `Categoría: ${doc.categoria}`,
-      `Organismo: ${doc.organismo}`,
-      `Fecha: ${doc.fecha} · Versión: ${doc.version} · Estado: ${doc.estado}`,
-      '',
-      doc.descripcion ?? ''
-    ].join('\n');
-    const url = URL.createObjectURL(new Blob([texto], { type: 'text/plain;charset=utf-8' }));
-    bajar(url, `${doc.titulo.replace(/[^\p{L}\p{N}]+/gu, '_').slice(0, 80)}_ficha.txt`);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    this._ctx.emitir('aviso', { texto: `Ficha de "${doc.titulo}" descargada (el archivo original aún no está cargado).`, tipo: 'info' });
+    // Sin archivo detrás. El prototipo fabricaba un .txt con membrete oficial,
+    // que podía pasar por el documento verdadero; ahora se dice lo que hay.
+    this._ctx.emitir('aviso', {
+      texto: `"${doc.titulo}" todavía no está cargado en el portal. Consultalo con la DETyFP.`,
+      tipo: 'info'
+    });
   }
 };
 

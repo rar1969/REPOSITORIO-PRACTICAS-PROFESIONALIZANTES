@@ -11,7 +11,7 @@
  * de la Dirección, con el oferente y el perfil de quien la pidió.
  */
 
-import { el, icono, reemplazar } from '../../ui/dom.js';
+import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 import { abrirModal, cerrarModal } from '../../ui/modal.js';
 
 export default {
@@ -66,6 +66,7 @@ function ficha(o, vincular) {
     el('div', { style: { marginBottom: '1.5rem' } },
       el('span', { class: 'org-type-badge', style: { marginBottom: '0.5rem', display: 'inline-block' } },
         o.tipo_organizacion),
+      o.ejemplo && ' ', marcaEjemplo(o),
       el('h2', { style: { fontSize: '1.6rem', color: 'var(--primary)' } }, o.razon_social),
       o.cuit && el('p', { style: { color: 'var(--text-muted)', fontWeight: '500' } },
         icono('fa-id-card'), ` CUIT: ${o.cuit}`)
@@ -81,6 +82,10 @@ function ficha(o, vincular) {
         o.contacto_persona ?? '', el('br'),
         o.correo && el('a', { href: `mailto:${o.correo}` }, o.correo))
     ),
+
+    o.ejemplo && el('p', { role: 'note', style: { background: '#fef3c7', color: '#92400e',
+        padding: '0.6rem 0.8rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', fontSize: '0.85rem' } },
+      'Registro de ejemplo: muestra cómo se verá la ficha de un oferente real. No es una empresa ni un convenio existentes.'),
 
     o.perfiles_requeridos && el('div', { style: { marginBottom: '1.5rem' } },
       el('h4', {}, 'Perfiles y tareas requeridas'),

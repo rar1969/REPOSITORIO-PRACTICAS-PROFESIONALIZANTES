@@ -55,3 +55,18 @@ export const vacio = texto =>
   el('p', { class: 'estado-vacio', role: 'status',
             style: { gridColumn: '1 / -1', textAlign: 'center',
                      color: 'var(--text-muted)', padding: '2rem 1rem' } }, texto);
+
+/**
+ * Insignia "Ejemplo" para registros ilustrativos (`ejemplo: true` en los
+ * datos). Todo registro inventado se marca así, para que nadie lo tome por
+ * una empresa, una escuela o un convenio reales. Devuelve null si no aplica.
+ */
+export const marcaEjemplo = item => item?.ejemplo
+  ? el('span', {
+      class: 'marca-ejemplo',
+      title: 'Registro ilustrativo: no corresponde a una institución ni a un convenio reales.',
+      style: { display: 'inline-block', background: '#fef3c7', color: '#92400e',
+               border: '1px dashed #d97706', borderRadius: '999px', padding: '0.1rem 0.55rem',
+               fontSize: '0.7rem', fontWeight: '700', letterSpacing: '0.04em' }
+    }, 'EJEMPLO')
+  : null;
