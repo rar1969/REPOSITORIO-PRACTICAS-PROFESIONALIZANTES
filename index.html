@@ -793,7 +793,13 @@
          supabase: { url: 'https://XXXX.supabase.co', clave: 'clave pública anon' }
     La clave "anon" es pública por diseño; NUNCA poner acá la clave service_role.
   -->
-  <script>window.PORTAL_CONFIG = { adaptador: 'estatico' };</script>
+  <script>window.PORTAL_CONFIG = {
+    adaptador: 'supabase',
+    supabase: {
+      url: 'https://llvktvzbdwiscfplzigo.supabase.co',
+      clave: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxsdmt0dnpiZHdpc2NmcGx6aWdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0NjI3NTYsImV4cCI6MjEwODAzODc1Nn0.Qkk7Q_hmaS-7x3vn-KYs_AwidpalNcMD_SrPskFuxhg'
+    }
+  };</script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -4,8 +4,9 @@ Esta guía es para hacer **una sola vez**. Cuando termine, el portal deja de gua
 en cada navegador y pasa a una base compartida, con ingreso por correo y contraseña.
 Todo se hace desde el navegador: no hace falta instalar nada.
 
-> Hasta completar el paso 8, el portal publicado sigue en modo demostración
-> (`adaptador: 'estatico'`). Nada de esto lo afecta mientras tanto.
+> **Estado al 20/10/2026:** pasos 1, 2, 7 y 8 hechos con el conector de Supabase.
+> Proyecto `portal-pp-detyfp` (ref. `llvktvzbdwiscfplzigo`, São Paulo), migraciones
+> 001–003 y semillas aplicadas, portal activado. Pendientes: 3, 4, 5 y 6.
 
 ## Antes de empezar: ¿con qué cuenta?
 
@@ -36,7 +37,8 @@ En el menú de la izquierda: **SQL Editor** → *New query*. Para cada archivo, 
 |---|---|---|
 | 1 | `supabase/migraciones/001_esquema.sql` | Tablas, permisos por rol y auditoría |
 | 2 | `supabase/migraciones/002_almacenamiento.sql` | Espacio para los archivos del repositorio |
-| 3 | `supabase/semillas.sql` | Carga las 39 escuelas, especialidades, departamentos y los ejemplos |
+| 3 | `supabase/migraciones/003_ajustes_seguridad.sql` | Ajustes que pide el asesor de seguridad de Supabase |
+| 4 | `supabase/semillas.sql` | Carga las 39 escuelas, especialidades, departamentos y los ejemplos |
 
 Para copiar cada uno: abrirlo en GitHub → botón **Raw** → seleccionar todo → copiar →
 pegar en el editor SQL → **Run**. Tiene que decir *Success*. Si da error, no seguir:
