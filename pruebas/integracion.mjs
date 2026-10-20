@@ -78,6 +78,9 @@ const ok = (etiqueta, condicion) => {
 
 /* ------------------------------------------------------------- arranque */
 
+// Una capa de cambios de la versión anterior de los datos, como la que quedó
+// en el navegador de quien probó el portal antes del cambio de ejemplos.
+window.localStorage.setItem('pp.v1.solicitudes', JSON.stringify({ creados: [], modificados: { 'SOL-TUC-101': { estado: 'Aprobada' } }, eliminados: [] }));
 const { iniciar } = await import('../js/core/index.js');
 const { api } = await import('../js/services/api.js');
 await iniciar();
@@ -88,6 +91,7 @@ const oferentes = (await api.listar('oferentes', { porPagina: 0 })).items;
 const casos = (await api.listar('casos', { porPagina: 0 })).items;
 
 console.log('\nArranque e inicio');
+ok('descarta la capa de cambios de los datos anteriores', window.localStorage.getItem('pp.v1.solicitudes') === null);
 ok('abre en la portada', visible('inicio') && $('[data-view=inicio]').classList.contains('active'));
 ok('la URL queda en #/inicio o vacía', ['', '#/inicio'].includes(window.location.hash));
 ok(`KPI escuelas = ${escuelas.length}, desde los datos`, $('#kpi-escuelas').textContent === String(escuelas.length));
@@ -269,7 +273,7 @@ ok('ninguna función del prototipo colgada de window',
 ok('el pie usa enlaces reales', $$('footer a[href^="#/"]').length === 4);
 
 console.log('\nLo cargado sobrevive a una recarga');
-const capa = JSON.parse(window.localStorage.getItem('pp.v1.solicitudes') || '{}');
+const capa = JSON.parse(window.localStorage.getItem('pp.v2.solicitudes') || '{}');
 ok('las solicitudes nuevas están en la capa de cambios', (capa.creados ?? []).length >= 3);
 ok('y la aprobación también', capa.modificados?.['SOL-TUC-101']?.estado === 'Aprobada');
 

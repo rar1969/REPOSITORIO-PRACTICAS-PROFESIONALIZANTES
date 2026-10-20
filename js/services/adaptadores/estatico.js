@@ -17,7 +17,14 @@
 import { esquemaDe, COLECCIONES } from '../../data/esquemas.js';
 
 const BASE_DATOS = new URL('../../../data/', import.meta.url);
-const PREFIJO_ALMACEN = 'pp.v1.';
+/*
+ * La versión del prefijo sube cuando los datos de origen cambian de sentido
+ * bajo los mismos identificadores. v2: los registros sintéticos se
+ * reemplazaron por ejemplos, y un cambio guardado sobre "OFER-TUC-001" ya no
+ * hablaría de la misma empresa. Las capas viejas se descartan al arrancar.
+ */
+const PREFIJO_ALMACEN = 'pp.v2.';
+const PREFIJOS_VIEJOS = ['pp.v1.'];
 
 const cacheBase = new Map();      // coleccion → datos del JSON
 const cacheCambios = new Map();   // coleccion → { creados, modificados, eliminados }
@@ -183,7 +190,17 @@ function siguienteId(items, esquema) {
 
 /* ------------------------------------------------------------- adaptador */
 
+function descartarCapasViejas() {
+  try {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const clave = localStorage.key(i);
+      if (PREFIJOS_VIEJOS.some(p => clave?.startsWith(p))) localStorage.removeItem(clave);
+    }
+  } catch { /* almacenamiento bloqueado: no hay nada que limpiar */ }
+}
+
 export function crearAdaptador() {
+  descartarCapasViejas();
   return {
     nombre: 'estatico',
 
