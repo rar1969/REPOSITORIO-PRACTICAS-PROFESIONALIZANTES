@@ -4,9 +4,10 @@ Esta guía es para hacer **una sola vez**. Cuando termine, el portal deja de gua
 en cada navegador y pasa a una base compartida, con ingreso por correo y contraseña.
 Todo se hace desde el navegador: no hace falta instalar nada.
 
-> **Estado al 20/10/2026:** pasos 1, 2, 7 y 8 hechos con el conector de Supabase.
-> Proyecto `portal-pp-detyfp` (ref. `llvktvzbdwiscfplzigo`, São Paulo), migraciones
-> 001–003 y semillas aplicadas, portal activado. Pendientes: 3, 4, 5 y 6.
+> **Estado al 20/10/2026: completa.** Proyecto `portal-pp-detyfp` (ref.
+> `llvktvzbdwiscfplzigo`, São Paulo), migraciones 001–003 y semillas aplicadas,
+> registro abierto desactivado, URL del portal configurada, usuario administrador
+> creado (por ahora con correo personal: pasar a uno institucional) y portal activado.
 
 ## Antes de empezar: ¿con qué cuenta?
 
