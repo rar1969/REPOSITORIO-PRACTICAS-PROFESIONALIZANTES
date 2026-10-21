@@ -56,8 +56,9 @@ let error = null;
 try {
   await db.exec(sql('supabase/migraciones/001_esquema.sql'));
   await db.exec(sql('supabase/migraciones/002_almacenamiento.sql'));
+  await db.exec(sql('supabase/migraciones/004_certificados.sql'));
 } catch (e) { error = e; }
-ok(`001 y 002 corren sin error${error ? `: ${error.message}` : ''}`, !error);
+ok(`001, 002 y 004 corren sin error${error ? `: ${error.message}` : ''}`, !error);
 
 // Supabase concede estos privilegios por defecto; las políticas RLS acotan.
 await db.exec(`
@@ -66,6 +67,7 @@ await db.exec(`
   grant execute on all functions in schema public to anon, authenticated;
   revoke execute on function public.contar_descarga(text) from public;
   grant execute on function public.contar_descarga(text) to anon, authenticated;
+  revoke execute on function public.registrar_emision(text[]) from public, anon;
 `);
 
 error = null;
@@ -78,6 +80,24 @@ ok('y se pueden volver a correr sin duplicar', !error &&
 
 const cuenta = async tabla => (await db.query(`select count(*)::int n from ${tabla}`)).rows[0].n;
 const datos = archivo => JSON.parse(sql(`data/${archivo}`));
+// Certificados de prueba (migración 004): un dictado y dos estudiantes.
+await db.exec(`
+  insert into capacitaciones (id, titulo, horas_certificadas) values ('CAP-90', 'Charla de prueba', 10);
+  insert into dictados (capacitacion_id, escuela_id, fecha) values ('CAP-90', 'ESC-01', '2026-05-07');
+  insert into participantes (dni, apellido, nombre, escuela_id) values ('49000001', 'Prueba', 'Uno', 'ESC-01');
+  insert into participantes (apellido, nombre, escuela_id, revisar, observaciones)
+    values ('Prueba', 'Dos', 'ESC-01', true, 'Sin DNI');
+  insert into certificados (participante_id, dictado_id, curso, especialidad, horas)
+    select id, 'DIC-001', '7mo', 'Informática', 10 from participantes;
+`);
+ok('los certificados se numeran y llevan un código único',
+  (await db.query(`select count(distinct codigo)::int n, min(id) primero from certificados`)).rows[0].primero === 'CER-0001' &&
+  (await db.query(`select count(distinct codigo)::int n from certificados`)).rows[0].n === 2);
+ok('una persona no recibe dos veces el mismo certificado',
+  await falla(`insert into certificados (participante_id, dictado_id, horas) values ('PAR-0001', 'DIC-001', 10)`));
+ok('un DNI no se repite entre participantes',
+  await falla(`insert into participantes (dni, apellido, nombre) values ('49000001', 'Otro', 'Igual')`));
+
 ok('39 escuelas, 17 departamentos, 14 especialidades',
   await cuenta('escuelas') === 39 && await cuenta('departamentos') === 17 && await cuenta('especialidades') === 14);
 ok('las especialidades llevan su resolución',
@@ -122,6 +142,10 @@ await como('anon', async () => {
     await cuenta('documentos') === datos('documentos.json').length);
   ok('NO ve ningún estudiante', await cuenta('estudiantes') === 0);
   ok('NO ve las solicitudes', await cuenta('solicitudes') === 0);
+  ok('NO ve participantes ni certificados, ni por la vista',
+    await cuenta('participantes') === 0 && await cuenta('certificados') === 0 && await cuenta('certificados_detalle') === 0);
+  ok('sí ve los dictados (sin datos personales)', await cuenta('dictados') === 1);
+  ok('no puede registrar una emisión', await falla(`select registrar_emision(array['CER-0001'])`));
   ok('NO ve perfiles ni auditoría', await cuenta('perfiles') === 0 && await cuenta('auditoria') === 0);
   await db.query(`insert into solicitudes (tipo, titulo, correo) values ('oferente', 'Empresa nueva', 'a@b.com')`);
   ok('puede enviar una solicitud (queda pendiente)', true);
@@ -160,6 +184,8 @@ await como('escuela', async () => {
   ok('el mismo DNI no se carga dos veces',
     await falla(`insert into estudiantes (dni, nombre, escuela) values ('47000001', 'Repetido', $1)`, [escuelaPrueba.nombre]));
   ok('no ve la bandeja de solicitudes', await cuenta('solicitudes') === 0);
+  ok('NO ve certificados (por ahora solo la DETyFP)', await cuenta('certificados_detalle') === 0);
+  ok('no puede registrar una emisión', await falla(`select registrar_emision(array['CER-0001'])`));
 });
 
 console.log('\nEmpresa');
@@ -189,6 +215,14 @@ await como('admin', async () => {
   await db.query(`update perfiles set nombre = 'Docente de prueba' where id = $1`, [USUARIOS.logueado]);
   ok('administra perfiles', await cuenta('perfiles') === 4);
   ok('lee la auditoría', await cuenta('auditoria') > 0);
+  ok('ve los certificados con todo lo que va en el diploma',
+    (await db.query(`select apellido, capacitacion, escuela from certificados_detalle where id = 'CER-0001'`)).rows[0]?.capacitacion === 'Charla de prueba');
+  ok('registrar la emisión cuenta la descarga y los pasa a impreso',
+    (await db.query(`select registrar_emision(array['CER-0001','CER-0002']) n`)).rows[0].n === 2 &&
+    (await db.query(`select count(*)::int n from certificados where estado = 'impreso' and descargas = 1 and impreso_en is not null`)).rows[0].n === 2);
+  await db.query(`update certificados set estado = 'anulado' where id = 'CER-0002'`);
+  ok('un certificado anulado no se vuelve a emitir',
+    (await db.query(`select registrar_emision(array['CER-0002']) n`)).rows[0].n === 0);
   await db.query(`insert into documentos (titulo) values ('Documento nuevo')`);
   ok('los identificadores siguen la numeración de los datos',
     (await db.query(`select id from documentos where titulo = 'Documento nuevo'`)).rows[0].id ===
@@ -204,6 +238,9 @@ ok('el cambio de la empresa quedó con autor y solo los campos cambiados',
 ok('la descarga anónima quedó registrada',
   (await db.query(`select count(*)::int n from auditoria where tabla = 'documentos' and registro = 'DOC-TUC-001'
     and accion = 'UPDATE' and autor is null`)).rows[0].n === 1);
+ok('la emisión de certificados quedó con su autor',
+  (await db.query(`select autor from auditoria where tabla = 'certificados' and registro = 'CER-0001'
+    and accion = 'UPDATE' order by id desc limit 1`)).rows[0]?.autor === USUARIOS.admin);
 ok('la resolución de la solicitud, con su autor',
   (await db.query(`select autor from auditoria where registro = 'SOL-TUC-102' and accion = 'UPDATE'`)).rows[0]?.autor === USUARIOS.admin);
 

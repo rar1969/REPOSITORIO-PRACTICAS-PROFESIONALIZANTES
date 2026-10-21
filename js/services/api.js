@@ -14,7 +14,10 @@
  *   api.eliminar(coleccion, id)                                  → void
  *   api.subirArchivo(bucket, archivo)                            → { url, tamanio, efimero }
  *   api.incrementar(coleccion, id, campo)                        → valor nuevo
+ *   api.registrarEmision(ids)                                    → cantidad registrada
  */
+
+import { esquemaDe } from '../data/esquemas.js';
 
 const ADAPTADORES = {
   estatico: () => import('./adaptadores/estatico.js'),
@@ -31,6 +34,14 @@ const NOMBRE_ADAPTADOR = config.adaptador || 'estatico';
  * para cualquier adaptador.
  */
 const OCULTAR_EJEMPLOS = Boolean(config.ocultarEjemplos);
+
+/**
+ * Colecciones `soloBase` (datos personales sin archivo público, como los
+ * certificados) no existen en modo estático: se devuelven vacías en lugar
+ * de fallar, y el módulo explica que hace falta la base.
+ */
+const sinBase = coleccion => NOMBRE_ADAPTADOR === 'estatico' && esquemaDe(coleccion).soloBase;
+const VACIO = { items: [], total: 0, pagina: 1, porPagina: 0 };
 const esEjemplo = item => Boolean(item && typeof item === 'object' && item.ejemplo);
 
 let adaptadorPrometido = null;
@@ -67,6 +78,7 @@ export const api = {
    * @returns {Promise<{items: Array, total: number, pagina: number, porPagina: number}>}
    */
   async listar(coleccion, opciones = {}) {
+    if (sinBase(coleccion)) return { ...VACIO };
     const a = await adaptador();
     if (!OCULTAR_EJEMPLOS) return a.listar(coleccion, opciones);
 
@@ -114,6 +126,16 @@ export const api = {
    */
   async incrementar(coleccion, id, campo) {
     return (await adaptador()).incrementar(coleccion, id, campo);
+  },
+
+  /**
+   * Deja constancia de que se generaron estos certificados: suma una
+   * descarga, los pasa a "impreso" y queda en la auditoría. Devuelve
+   * cuántos se registraron. Solo el administrador puede hacerlo.
+   */
+  async registrarEmision(ids) {
+    const a = await adaptador();
+    return a.registrarEmision ? a.registrarEmision(ids) : 0;
   },
 
   /** Sube un archivo y devuelve su ubicación. */

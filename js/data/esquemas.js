@@ -96,6 +96,21 @@ export const ESQUEMAS = {
     privada: true             // se envían desde formularios públicos; las lee la DETyFP
   },
 
+  certificados: {
+    // Una fila por certificado, con lo que se imprime en el diploma: es la
+    // vista certificados_detalle (migración 004). Solo existe en la base:
+    // son datos de menores y no hay archivo JSON público.
+    tabla: 'certificados_detalle',
+    tipo: 'coleccion',
+    clave: 'id',
+    prefijo: 'CER-',
+    relleno: 4,
+    buscables: ['apellido', 'nombre', 'dni', 'escuela', 'capacitacion'],
+    sensible: true,
+    privada: true,
+    soloBase: true
+  },
+
   departamentos: {
     archivo: 'departamentos.json',
     tipo: 'lista',            // los 17 de Tucumán; valida filtros y altas

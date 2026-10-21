@@ -1,9 +1,10 @@
 /**
  * modules/admin — Panel de gestión de la DETyFP.
  *
- * Última vista migrada: con ella, app.js deja de existir. Reúne cinco
+ * Última vista migrada: con ella, app.js deja de existir. Reúne seis
  * solapas —bandeja de solicitudes, especialidades, nómina de practicantes,
- * capacitaciones y documentos— y es el único módulo con `roles: ['admin']`.
+ * capacitaciones, certificados y documentos— y es el único módulo con
+ * `roles: ['admin']`. La de certificados vive en modules/certificados.
  *
  * Lo que cambia respecto del prototipo:
  *
@@ -24,7 +25,7 @@
 import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 import { abrirModal, cerrarModal } from '../../ui/modal.js';
 
-const SOLAPAS = ['solicitudes', 'especialidades', 'alumnos', 'capacitaciones', 'documentos'];
+const SOLAPAS = ['solicitudes', 'especialidades', 'alumnos', 'capacitaciones', 'certificados', 'documentos'];
 const TIPOS_SOLICITUD = {
   oferente: 'Oferente', experiencia: 'Experiencia', replica: 'Réplica', vinculacion: 'Vinculación'
 };
@@ -101,6 +102,7 @@ export default {
       especialidades: () => this._dibujarEspecialidades(),
       alumnos: () => this._dibujarAlumnos(),
       capacitaciones: () => this._dibujarCapacitaciones(),
+      certificados: () => this._dibujarCertificados(),
       documentos: () => this._dibujarDocumentos()
     };
     try {
@@ -323,6 +325,16 @@ export default {
             el('td', {}, el('span', { class: `status-badge ${c.estado === 'En Curso' ? 'active' : ''}` }, c.estado))
           )))
     ));
+  },
+
+  /* --------------------------------------------------------- certificados */
+
+  async _dibujarCertificados() {
+    const contenedor = document.getElementById('admin-tab-certificados');
+    if (!contenedor) return;
+    // Se importa al abrir el panel; pdf-lib y las fuentes, recién al generar.
+    const { dibujarCertificados } = await import('../certificados/panel.js');
+    await dibujarCertificados(contenedor, this._ctx);
   },
 
   /* ----------------------------------------------------------- documentos */

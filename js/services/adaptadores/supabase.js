@@ -194,6 +194,14 @@ export function crearAdaptador(config) {
       return nuevo;
     },
 
+    /** Certificados generados: descarga, estado "impreso" y auditoría (migración 004). */
+    async registrarEmision(ids) {
+      const db = await cliente();
+      const { data, error } = await db.rpc('registrar_emision', { ids });
+      if (error) throw fallo(error, 'registrar la emisión de los certificados');
+      return data;
+    },
+
     async subirArchivo(bucket, archivo) {
       const db = await cliente();
       const nombre = String(archivo.name)

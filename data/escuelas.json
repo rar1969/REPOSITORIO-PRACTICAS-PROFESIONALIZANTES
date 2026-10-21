@@ -222,7 +222,7 @@
   {
     "id": "ESC-09",
     "cue": "9002199",
-    "nombre": "Escuela Agrotécnica los Pizarros",
+    "nombre": "Escuela Agrotécnica Los Pizarros",
     "tipo": "agrotecnica",
     "localidad": "Los Pizarros",
     "municipio": "Comuna Rural los Pizarros",
@@ -249,7 +249,7 @@
   {
     "id": "ESC-10",
     "cue": "9000054",
-    "nombre": "Escuela Agrotécnica los Sarmiento",
+    "nombre": "Escuela Agrotécnica Los Sarmiento",
     "tipo": "agrotecnica",
     "localidad": "Los Sarmiento",
     "municipio": "Comuna Rural los Sarmiento",
@@ -413,7 +413,7 @@
   {
     "id": "ESC-16",
     "cue": "9000742",
-    "nombre": "Escuela Técnica Crucero Ara Gral. Belgrano",
+    "nombre": "Escuela Técnica Crucero ARA Gral. Belgrano",
     "tipo": "tecnica",
     "localidad": "Famaillá",
     "municipio": "Municipalidad Famaillá",
@@ -442,7 +442,7 @@
   {
     "id": "ESC-17",
     "cue": "9001729",
-    "nombre": "Escuela Técnica el Mollar",
+    "nombre": "Escuela Técnica El Mollar",
     "tipo": "tecnica",
     "localidad": "El Mollar",
     "municipio": "Comuna Rural el Mollar",
@@ -676,7 +676,7 @@
   {
     "id": "ESC-25",
     "cue": "9000690",
-    "nombre": "Escuela Técnica N° 1 la Cocha",
+    "nombre": "Escuela Técnica N° 1 La Cocha",
     "tipo": "tecnica",
     "localidad": "La Cocha",
     "municipio": "Municipalidad la Cocha",
@@ -1030,7 +1030,7 @@
   {
     "id": "ESC-37",
     "cue": "9001774",
-    "nombre": "Escuela Técnica N° 4 Juan Xxiii",
+    "nombre": "Escuela Técnica N° 4 Juan XXIII",
     "tipo": "tecnica",
     "localidad": "San Miguel de Tucumán",
     "municipio": "Municipalidad San Miguel de Tucumán",

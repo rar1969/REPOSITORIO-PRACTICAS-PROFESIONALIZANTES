@@ -1204,3 +1204,31 @@ img {
   .form-group-full { grid-column: span 1; }
   .brand-logo-img { height: 38px; }
 }
+
+/* Certificados (Panel DETyFP) */
+.cert-encabezado { margin-bottom: 1rem; }
+.cert-filtros, .cert-opciones, .cert-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.9rem;
+}
+.cert-filtros .cert-control { flex: 1 1 200px; min-width: 0; }
+.cert-control {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.875rem;
+}
+.cert-opciones { font-size: 0.875rem; color: var(--text-muted); }
+.cert-opciones label { display: inline-flex; align-items: center; gap: 0.4rem; }
+.cert-acciones { justify-content: space-between; }
+.cert-resumen { margin: 0; font-size: 0.875rem; color: var(--text-muted); }
+.cert-acciones .nav-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+.cert-alerta { color: var(--accent-amber, #b45309); font-size: 0.8rem; margin-top: 0.25rem; }
+.data-table tr.cert-revisar td { background: rgba(245, 158, 11, 0.07); }
+.data-table td .btn-action-sm[disabled] { opacity: 0.5; cursor: wait; }
