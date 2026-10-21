@@ -238,14 +238,14 @@ export async function generarPdf(certificados, recursos, opciones = {}) {
     // Curso y escuela: en un renglón si entra; si no, en dos.
     const curso = tramo(c.curso, f.negrita, 12, GRIS_OSCURO);
     const escuela = tramo(c.escuela, f.negrita, 12, GRIS_OSCURO);
-    const unRenglon = [tramo('Alumno de ', f.texto, 12, NEGRO), curso,
+    const unRenglon = [tramo('Estudiante de ', f.texto, 12, NEGRO), curso,
       tramo(' perteneciente a la institución educativa ', f.texto, 12, NEGRO), escuela];
     const anchoUno = unRenglon.reduce((s, t) => s + t.fuente.widthOfTextAtSize(t.texto, t.tam), 0);
     if (anchoUno <= ANCHO_UTIL / 0.92) {   // entra achicando la letra hasta un 8 %
       linea(pagina, unRenglon, { centro: CENTRO, base: 279.1, minimo: 0.92 });
       linea(pagina, [tramo('ha participado de la charla:', f.texto, 12, NEGRO)], { centro: CENTRO, base: 263.7 });
     } else {
-      linea(pagina, [tramo('Alumno de ', f.texto, 12, NEGRO), curso,
+      linea(pagina, [tramo('Estudiante de ', f.texto, 12, NEGRO), curso,
         tramo(' perteneciente a la institución educativa', f.texto, 12, NEGRO)], { centro: CENTRO, base: 285 });
       linea(pagina, [escuela, tramo(', ha participado de la charla:', f.texto, 12, NEGRO)],
         { centro: CENTRO, base: 269.6 });
