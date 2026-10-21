@@ -43,7 +43,7 @@ function tarjeta(cap) {
       el('div', { style: { display: 'flex', justifyContent: 'space-between',
                            alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.75rem' } },
         el('span', { style: { display: 'flex', gap: '0.35rem', flexWrap: 'wrap' } },
-          el('span', { class: 'org-type-badge' }, cap.tipo), marcaEjemplo(cap)),
+          cap.tipo && el('span', { class: 'org-type-badge' }, cap.tipo), marcaEjemplo(cap)),
         el('span', { class: `status-badge ${cap.estado === 'En Curso' ? 'active' : ''}` }, cap.estado)
       ),
       el('h3', { style: { fontSize: '1.15rem', marginBottom: '0.5rem', color: 'var(--primary)' } },
