@@ -240,7 +240,7 @@ await como('admin', async () => {
     values ('50000001', 'Carga', 'Manual', 'ESC-03') returning id`)).rows[0].id;
   await db.query(`insert into certificados (participante_id, dictado_id, curso, especialidad, horas)
     select $1, id, '6° 1°', 'Informática', 10 from dictados where escuela_id = 'ESC-03'`, [nuevo]);
-  ok('carga a mano una charla, un estudiante de 6.° y su certificado',
+  ok('carga a mano una charla, un estudiante de 5.° o 6.° y su certificado',
     (await db.query(`select count(*)::int n from certificados_detalle where dni = '50000001' and curso = '6° 1°'`)).rows[0].n === 1);
   ok('el catálogo público suma la escuela nueva',
     (await db.query(`select escuelas_participantes e from capacitaciones where id = 'CAP-90'`)).rows[0].e === 2);

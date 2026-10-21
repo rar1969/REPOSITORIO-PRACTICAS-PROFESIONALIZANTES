@@ -13,7 +13,7 @@
  * corregirlas. Un estudiante que ya estaba en la base (mismo DNI) se reutiliza:
  * no se duplica.
  *
- * Los estudiantes de 6.° año son en su mayoría menores, con autorización de su
+ * Los estudiantes de 5.° y 6.° año son en su mayoría menores, con autorización de su
  * escuela para hacer la capacitación, y reciben el mismo certificado. Sus datos
  * solo los ve y los carga el administrador (políticas de la migración 004).
  */

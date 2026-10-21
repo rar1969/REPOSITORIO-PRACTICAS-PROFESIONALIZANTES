@@ -118,7 +118,7 @@ export const ESQUEMAS = {
 
   participantes: {
     // Estudiantes que recibieron certificados (migración 004). Muchos son
-    // menores de 6.° año, con autorización de su escuela: solo los ve y carga
+    // menores de 5.° y 6.° año, con autorización de su escuela: solo los ve y carga
     // el administrador.
     tabla: 'participantes',
     tipo: 'coleccion',

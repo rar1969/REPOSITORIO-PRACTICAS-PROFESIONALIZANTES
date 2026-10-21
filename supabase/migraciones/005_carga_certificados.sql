@@ -2,7 +2,7 @@
 -- Migración 005 — carga manual de certificados desde el portal
 --
 -- Desde el Panel DETyFP se cargan a mano charlas (dictados), estudiantes y
--- certificados, sin pasar por la planilla. Los estudiantes de 6.° año son en
+-- certificados, sin pasar por la planilla. Los estudiantes de 5.° y 6.° año son en
 -- su mayoría menores: la escuela autoriza su participación y reciben el mismo
 -- certificado. Sus datos siguen protegidos por las políticas de la 004 (solo
 -- el administrador los ve y los carga).
