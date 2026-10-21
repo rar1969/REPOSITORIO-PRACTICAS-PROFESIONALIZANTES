@@ -90,13 +90,25 @@ function crearPanel(contenedor, ctx) {
   const cuerpo = el('tbody');
   const aviso = el('div');
 
+  const botonCargar = el('button', { type: 'button', class: 'btn-primary-action nav-btn',
+    onclick: async () => {
+      try {
+        const { abrirCarga } = await import('./carga.js');
+        await abrirCarga(panel.ctx, { alTerminar: () => panel.recargar() });
+      } catch (error) {
+        panel.ctx.emitir('aviso', { tipo: 'error', texto: error.message });
+      }
+    } }, icono('fa-table-list'), ' Cargar estudiantes');
+
   reemplazar(contenedor, [
     el('div', { class: 'cert-encabezado' },
       el('div', {},
         el('h3', {}, 'Certificados de acreditación de horas de PP'),
         el('p', { style: { color: 'var(--text-muted)' } },
           'Elegí escuela y charla, marcá los estudiantes y generá un solo PDF listo para imprimir. ',
-          'Cada certificado generado queda registrado como impreso.'))),
+          'Cada certificado generado queda registrado como impreso. ',
+          'Para sumar estudiantes, tipealos o pegalos en una grilla, o subí un Excel.')),
+      botonCargar),
     aviso,
     el('div', { class: 'cert-filtros' }, selEscuela, selCharla, selEstado, buscador),
     el('div', { class: 'cert-opciones' },
@@ -108,7 +120,7 @@ function crearPanel(contenedor, ctx) {
       el('table', { class: 'data-table' },
         el('thead', {}, el('tr', {},
           el('th', { scope: 'col', style: { width: '2rem' } }, marcarTodos),
-          ['Estudiante', 'Curso', 'Escuela', 'Charla', 'Estado', 'PDF']
+          ['Estudiante', 'Curso', 'Escuela', 'Charla', 'Estado', 'Acciones']
             .map(t => el('th', { scope: 'col' }, t)))),
         cuerpo))
   ]);
@@ -186,10 +198,39 @@ function crearPanel(contenedor, ctx) {
         el('span', { class: `status-badge ${c.estado === 'impreso' ? 'active' : ''}` }, ESTADOS[c.estado] ?? c.estado),
         c.descargas ? el('small', { style: { display: 'block', color: 'var(--text-muted)' } },
           `${c.descargas} descarga${c.descargas === 1 ? '' : 's'}`) : null),
-      el('td', {}, el('button', { type: 'button', class: 'btn-action-sm btn-approve',
-        'aria-label': `Certificado de ${c.apellido}, ${c.nombre}`,
-        disabled: estado.ocupado || undefined,
-        onclick: () => generar([c.id]) }, icono('fa-download'), ' PDF')));
+      el('td', { class: 'cert-botones' },
+        el('button', { type: 'button', class: 'btn-action-sm btn-approve',
+          'aria-label': `Certificado de ${c.apellido}, ${c.nombre}`,
+          disabled: estado.ocupado || undefined,
+          onclick: () => generar([c.id]) }, icono('fa-download'), ' PDF'),
+        el('button', { type: 'button', class: 'btn-action-sm',
+          'aria-label': `Corregir datos de ${c.apellido}, ${c.nombre}`,
+          onclick: () => corregir(c) }, icono('fa-pen'), ' Corregir'),
+        !c.descargas && c.estado === 'pendiente' && el('button', { type: 'button', class: 'btn-action-sm btn-reject',
+          'aria-label': `Quitar el certificado de ${c.apellido}, ${c.nombre}`,
+          onclick: () => quitar(c) }, icono('fa-trash'), ' Quitar')));
+  }
+
+  async function corregir(c) {
+    try {
+      const { abrirEdicion } = await import('./carga.js');
+      await abrirEdicion(panel.ctx, c, { alTerminar: () => panel.recargar() });
+    } catch (error) {
+      panel.ctx.emitir('aviso', { tipo: 'error', texto: error.message });
+    }
+  }
+
+  async function quitar(c) {
+    if (!window.confirm(`¿Quitar el certificado de ${c.apellido}, ${c.nombre} (${c.capacitacion})?\n\n` +
+      'Solo se puede porque nunca se descargó. La persona sigue en la base.')) return;
+    try {
+      await panel.ctx.api.eliminar('certificados', c.id);
+      estado.seleccion.delete(c.id);
+      panel.ctx.emitir('aviso', { tipo: 'info', texto: `Certificado ${c.id} quitado.` });
+      await panel.recargar();
+    } catch (error) {
+      panel.ctx.emitir('aviso', { tipo: 'error', texto: error.message });
+    }
   }
 
   /* ---------------------------------------------------------- generación */

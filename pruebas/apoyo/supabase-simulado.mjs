@@ -39,6 +39,7 @@ export async function crearBase() {
   await db.exec(sql('supabase/migraciones/001_esquema.sql'));
   await db.exec(sql('supabase/migraciones/002_almacenamiento.sql'));
   await db.exec(sql('supabase/migraciones/004_certificados.sql'));
+  await db.exec(sql('supabase/migraciones/005_carga_certificados.sql'));
   await db.exec(`
     grant all on all tables in schema public to anon, authenticated;
     grant all on all sequences in schema public to anon, authenticated;

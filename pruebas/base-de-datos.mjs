@@ -57,8 +57,9 @@ try {
   await db.exec(sql('supabase/migraciones/001_esquema.sql'));
   await db.exec(sql('supabase/migraciones/002_almacenamiento.sql'));
   await db.exec(sql('supabase/migraciones/004_certificados.sql'));
+  await db.exec(sql('supabase/migraciones/005_carga_certificados.sql'));
 } catch (e) { error = e; }
-ok(`001, 002 y 004 corren sin error${error ? `: ${error.message}` : ''}`, !error);
+ok(`001, 002, 004 y 005 corren sin error${error ? `: ${error.message}` : ''}`, !error);
 
 // Supabase concede estos privilegios por defecto; las políticas RLS acotan.
 await db.exec(`
@@ -95,6 +96,15 @@ ok('los certificados se numeran y llevan un código único',
   (await db.query(`select count(distinct codigo)::int n from certificados`)).rows[0].n === 2);
 ok('una persona no recibe dos veces el mismo certificado',
   await falla(`insert into certificados (participante_id, dictado_id, horas) values ('PAR-0001', 'DIC-001', 10)`));
+const resumen = async () => (await db.query(
+  `select escuelas_participantes e, participantes_inscritos p, fecha_inicio::text i from capacitaciones where id = 'CAP-90'`)).rows[0];
+ok('la capacitación cuenta sola escuelas e inscriptos', (r => r.e === 1 && r.p === 2 && r.i === '2026-05-07')(await resumen()));
+await db.exec(`insert into dictados (capacitacion_id, escuela_id, fecha) values ('CAP-90', 'ESC-02', '2026-04-30');
+  insert into participantes (dni, apellido, nombre, escuela_id) values ('49000003', 'Prueba', 'Tres', 'ESC-02');
+  insert into certificados (participante_id, dictado_id, horas) values ('PAR-0003', 'DIC-002', 10);`);
+ok('una carga a mano en otra escuela actualiza el catálogo', (r => r.e === 2 && r.p === 3 && r.i === '2026-04-30')(await resumen()));
+await db.exec(`delete from certificados where participante_id = 'PAR-0003'; delete from dictados where id = 'DIC-002';`);
+ok('y quitarla lo vuelve atrás', (r => r.e === 1 && r.p === 2 && r.i === '2026-05-07')(await resumen()));
 ok('un DNI no se repite entre participantes',
   await falla(`insert into participantes (dni, apellido, nombre) values ('49000001', 'Otro', 'Igual')`));
 
@@ -185,6 +195,10 @@ await como('escuela', async () => {
     await falla(`insert into estudiantes (dni, nombre, escuela) values ('47000001', 'Repetido', $1)`, [escuelaPrueba.nombre]));
   ok('no ve la bandeja de solicitudes', await cuenta('solicitudes') === 0);
   ok('NO ve certificados (por ahora solo la DETyFP)', await cuenta('certificados_detalle') === 0);
+  ok('no puede cargar estudiantes ni certificados',
+    await falla(`insert into participantes (apellido, nombre) values ('Intruso', 'Uno')`) &&
+    await falla(`insert into certificados (participante_id, dictado_id, horas) values ('PAR-0001', 'DIC-001', 99)`) &&
+    await falla(`insert into dictados (capacitacion_id, escuela_id) values ('CAP-90', 'ESC-01')`));
   ok('no puede registrar una emisión', await falla(`select registrar_emision(array['CER-0001'])`));
 });
 
@@ -221,6 +235,17 @@ await como('admin', async () => {
     (await db.query(`select registrar_emision(array['CER-0001','CER-0002']) n`)).rows[0].n === 2 &&
     (await db.query(`select count(*)::int n from certificados where estado = 'impreso' and descargas = 1 and impreso_en is not null`)).rows[0].n === 2);
   await db.query(`update certificados set estado = 'anulado' where id = 'CER-0002'`);
+  await db.query(`insert into dictados (capacitacion_id, escuela_id, fecha) values ('CAP-90', 'ESC-03', '2026-10-20')`);
+  const nuevo = (await db.query(`insert into participantes (dni, apellido, nombre, escuela_id)
+    values ('50000001', 'Carga', 'Manual', 'ESC-03') returning id`)).rows[0].id;
+  await db.query(`insert into certificados (participante_id, dictado_id, curso, especialidad, horas)
+    select $1, id, '6° 1°', 'Informática', 10 from dictados where escuela_id = 'ESC-03'`, [nuevo]);
+  ok('carga a mano una charla, un estudiante de 6.° y su certificado',
+    (await db.query(`select count(*)::int n from certificados_detalle where dni = '50000001' and curso = '6° 1°'`)).rows[0].n === 1);
+  ok('el catálogo público suma la escuela nueva',
+    (await db.query(`select escuelas_participantes e from capacitaciones where id = 'CAP-90'`)).rows[0].e === 2);
+  ok('quita un certificado cargado por error',
+    (await db.query(`delete from certificados where participante_id = $1 returning id`, [nuevo])).rows.length === 1);
   ok('un certificado anulado no se vuelve a emitir',
     (await db.query(`select registrar_emision(array['CER-0002']) n`)).rows[0].n === 0);
   await db.query(`insert into documentos (titulo) values ('Documento nuevo')`);

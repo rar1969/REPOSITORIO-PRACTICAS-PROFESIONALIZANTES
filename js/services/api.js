@@ -42,6 +42,11 @@ const OCULTAR_EJEMPLOS = Boolean(config.ocultarEjemplos);
  */
 const sinBase = coleccion => NOMBRE_ADAPTADOR === 'estatico' && esquemaDe(coleccion).soloBase;
 const VACIO = { items: [], total: 0, pagina: 1, porPagina: 0 };
+function exigirBase(coleccion) {
+  if (sinBase(coleccion)) {
+    throw new Error('Esto se guarda en la base de datos del portal y la versión de demostración no la tiene.');
+  }
+}
 const esEjemplo = item => Boolean(item && typeof item === 'object' && item.ejemplo);
 
 let adaptadorPrometido = null;
@@ -100,22 +105,26 @@ export const api = {
 
   /** Devuelve una entidad por su identificador, o null si no existe. */
   async obtener(coleccion, id) {
+    if (sinBase(coleccion)) return null;
     const item = await (await adaptador()).obtener(coleccion, id);
     return OCULTAR_EJEMPLOS && esEjemplo(item) ? null : item;
   },
 
   /** Crea una entidad; el adaptador asigna el identificador si no viene. */
   async crear(coleccion, datos) {
+    exigirBase(coleccion);
     return (await adaptador()).crear(coleccion, datos);
   },
 
   /** Aplica cambios parciales sobre una entidad existente. */
   async actualizar(coleccion, id, cambios) {
+    exigirBase(coleccion);
     return (await adaptador()).actualizar(coleccion, id, cambios);
   },
 
   /** Elimina una entidad. */
   async eliminar(coleccion, id) {
+    exigirBase(coleccion);
     return (await adaptador()).eliminar(coleccion, id);
   },
 

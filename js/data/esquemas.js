@@ -12,6 +12,10 @@
  *   privada   nadie la lee sin sesión; crear no puede devolver la fila creada
  *             a quien la envió (un visitante manda una solicitud y no la ve)
  *   columna   en las listas, la columna que guarda cada valor
+ *   tablaEscritura  si se lee de una vista, la tabla donde se crea, modifica
+ *             y borra (certificados: se lee certificados_detalle, se escribe
+ *             en certificados)
+ *   soloBase  sin archivo JSON: existe solo con el adaptador de Supabase
  */
 
 export const ESQUEMAS = {
@@ -101,6 +105,7 @@ export const ESQUEMAS = {
     // vista certificados_detalle (migración 004). Solo existe en la base:
     // son datos de menores y no hay archivo JSON público.
     tabla: 'certificados_detalle',
+    tablaEscritura: 'certificados',
     tipo: 'coleccion',
     clave: 'id',
     prefijo: 'CER-',
@@ -108,6 +113,31 @@ export const ESQUEMAS = {
     buscables: ['apellido', 'nombre', 'dni', 'escuela', 'capacitacion'],
     sensible: true,
     privada: true,
+    soloBase: true
+  },
+
+  participantes: {
+    // Estudiantes que recibieron certificados (migración 004). Muchos son
+    // menores de 6.° año, con autorización de su escuela: solo los ve y carga
+    // el administrador.
+    tabla: 'participantes',
+    tipo: 'coleccion',
+    clave: 'id',
+    prefijo: 'PAR-',
+    relleno: 4,
+    buscables: ['apellido', 'nombre', 'dni'],
+    sensible: true,
+    soloBase: true
+  },
+
+  dictados: {
+    // Cada vez que una capacitación se dio en una escuela: fecha y disertantes.
+    tabla: 'dictados',
+    tipo: 'coleccion',
+    clave: 'id',
+    prefijo: 'DIC-',
+    relleno: 3,
+    buscables: [],
     soloBase: true
   },
 

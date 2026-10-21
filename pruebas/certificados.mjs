@@ -66,5 +66,42 @@ const grande = await generarPdf(lote, recursos);
 ok(`la plantilla se comparte entre páginas (60 diplomas: ${Math.round(grande.length / 1024)} KB)`,
   grande.length < 1.5 * 1024 * 1024);
 
+console.log('\nCarga: reconocer lo que se tipea o viene en una planilla');
+const { JSDOM } = await import('jsdom');
+globalThis.DOMParser ??= new JSDOM('').window.DOMParser;
+const co = await import('../js/modules/certificados/coincidencias.js');
+const { leerPlanilla, interpretar, fechaDeExcel } = await import('../js/modules/certificados/planilla.js');
+const escuelas = JSON.parse(fs.readFileSync(RAIZ + 'data/escuelas.json', 'utf8'));
+const especialidades = JSON.parse(fs.readFileSync(RAIZ + 'data/especialidades.json', 'utf8'));
+const escuelaDe = t => co.buscarEscuela(t, escuelas)?.id;
+ok('escuelas escritas de otra forma', escuelaDe('Escuela Técnica Nº 1 Juan Bautista Alberdi') === 'ESC-24' &&
+  escuelaDe('Escuela Técnica Nº 4 - Juan XXIII') === 'ESC-37' && escuelaDe('ET 2 Obispo Colombres') === 'ESC-34' &&
+  escuelaDe('Escuela Técnica Nº 1 Crucero ARA General Belgrano') === 'ESC-16');
+ok('no inventa una escuela que no está', escuelaDe('Colegio Nacional') === undefined);
+ok('especialidades por su título o sigla',
+  co.buscarEspecialidad('Tecnico en informática Personal y Profesional', especialidades) === 'Informática' &&
+  co.buscarEspecialidad('Electromecánico', especialidades) === 'Electromecánica' &&
+  co.buscarEspecialidad('MMO', especialidades) === 'Maestro Mayor de Obras');
+ok('nombres en mayúsculas pasan a formato propio',
+  co.nombrePropio('PÉREZ DE LA FUENTE') === 'Pérez de la Fuente' && co.nombrePropio('McDonald') === 'McDonald');
+ok('DNI con puntos se acepta; uno mal escrito, no',
+  co.limpiarDni('49.505.168') === '49505168' && co.limpiarDni('') === null && (() => {
+    try { co.limpiarDni('49.04B.988'); return false; } catch { return true; } })());
+ok('fecha de Excel', fechaDeExcel('46169') === '2026-05-27');
+
+const planilla = interpretar([
+  ['', '', ''],
+  ['DNI', 'Apellido', 'Nombre', '', 'Nombre de la Charla', 'Fecha', 'Curso'],
+  ['49.000.001', 'PÉREZ', 'Ana', 'Escuela Técnica Nº 1 Monteros', 'Ciclo de Vida', '46149', '6to 1ra'],
+  ['', 'Gómez', 'Luis', 'Escuela Técnica Nº 1 Monteros', 'Ciclo de Vida', '46149', '6to 1ra']
+]);
+ok('encuentra los encabezados aunque no estén en la primera fila', planilla.filas.length === 2 &&
+  planilla.filas[0].dni === '49.000.001' && planilla.filas[0].fecha === '2026-05-07');
+ok('reconoce la columna de escuelas sin título', planilla.filas[1].escuela === 'Escuela Técnica Nº 1 Monteros');
+const csv = Buffer.from('Apellido y nombre;DNI;Curso\n"Pérez, Ana";49.000.001;6° 1°\n');
+const [hojaCsv] = await leerPlanilla({ name: 'lista.csv', arrayBuffer: async () => csv.buffer.slice(csv.byteOffset, csv.byteOffset + csv.length) });
+const deCsv = interpretar(hojaCsv.filas).filas[0];
+ok('lee CSV con ";" y separa "Apellido, Nombre"', deCsv.apellido === 'Pérez' && deCsv.nombre === 'Ana' && deCsv.curso === '6° 1°');
+
 console.log(fallas === 0 ? '\nTodo en orden.\n' : `\n${fallas} prueba(s) con falla.\n`);
 process.exit(fallas ? 1 : 0);

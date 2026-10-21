@@ -82,6 +82,8 @@ function aplicarFiltros(consulta, filtros, esquema) {
 export function crearAdaptador(config) {
   const cliente = () => obtenerCliente(config);
   const tablaDe = coleccion => esquemaDe(coleccion).tabla ?? coleccion;
+  // Las colecciones que se leen de una vista se escriben en su tabla.
+  const tablaEscrituraDe = coleccion => esquemaDe(coleccion).tablaEscritura ?? tablaDe(coleccion);
 
   return {
     nombre: 'supabase',
@@ -137,7 +139,7 @@ export function crearAdaptador(config) {
     async crear(coleccion, datos) {
       const esquema = esquemaDe(coleccion);
       const db = await cliente();
-      const tabla = db.from(tablaDe(coleccion));
+      const tabla = db.from(tablaEscrituraDe(coleccion));
 
       if (esquema.tipo === 'lista') {
         const { error } = await tabla.insert({ [esquema.columna ?? 'nombre']: datos });
@@ -163,7 +165,7 @@ export function crearAdaptador(config) {
     async actualizar(coleccion, id, cambios) {
       const esquema = esquemaDe(coleccion);
       const db = await cliente();
-      const { data, error } = await db.from(tablaDe(coleccion))
+      const { data, error } = await db.from(tablaEscrituraDe(coleccion))
         .update(limpiarEntrada(cambios)).eq(esquema.clave, id).select().maybeSingle();
       if (error) throw fallo(error, `modificar ${coleccion}`);
       // Sin fila devuelta: no existe, o el rol no tiene permiso para tocarla.
@@ -175,7 +177,7 @@ export function crearAdaptador(config) {
       const esquema = esquemaDe(coleccion);
       const db = await cliente();
       const clave = esquema.tipo === 'lista' ? (esquema.columna ?? 'nombre') : esquema.clave;
-      const { data, error } = await db.from(tablaDe(coleccion)).delete().eq(clave, id).select(clave);
+      const { data, error } = await db.from(tablaEscrituraDe(coleccion)).delete().eq(clave, id).select(clave);
       if (error) throw fallo(error, `eliminar de ${coleccion}`);
       if (!data?.length) throw fallo({ code: '42501', message: 'sin filas' }, `eliminar de ${coleccion}`);
     },
