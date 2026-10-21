@@ -309,22 +309,58 @@ export default {
   async _dibujarCapacitaciones() {
     const envoltorio = document.getElementById('admin-capacitaciones-table-wrapper');
     if (!envoltorio) return;
-    const { items } = await this._ctx.api.listar('capacitaciones', { porPagina: 0 });
-    const columnas = ['Programa de capacitación', 'Organismo oferente', 'Tipo', 'Hs certificadas', 'Inscriptos', 'Estado'];
+    const { items } = await this._ctx.api.listar('capacitaciones', { orden: 'titulo', porPagina: 0 });
+    const conBase = this._ctx.api.origen === 'supabase';
+    const columnas = ['Programa de capacitación', 'Organismo oferente', 'Hs certificadas', 'Escuelas',
+      'Presentes', 'Estado', ...(conBase ? ['Acciones'] : [])];
+
+    const general = document.getElementById('btn-cargar-presentes');
+    if (general) {
+      general.style.display = conBase ? '' : 'none';
+      general.onclick = () => this._cargarPresentes();
+    }
 
     reemplazar(envoltorio, el('table', { class: 'data-table' },
       el('thead', {}, el('tr', {}, columnas.map(c => el('th', { scope: 'col' }, c)))),
       el('tbody', {}, items.length === 0
         ? filaVacia(columnas.length, 'No hay capacitaciones cargadas.')
         : items.map(c => el('tr', {},
-            el('td', {}, el('strong', {}, c.titulo), c.ejemplo && ' ', marcaEjemplo(c)),
-            el('td', {}, c.organismo),
-            el('td', {}, el('span', { class: 'org-type-badge' }, c.tipo)),
-            el('td', {}, `${c.horas_certificadas} h`),
-            el('td', {}, String(c.participantes_inscritos)),
-            el('td', {}, el('span', { class: `status-badge ${c.estado === 'En Curso' ? 'active' : ''}` }, c.estado))
+            el('td', {}, el('strong', {}, c.titulo), c.ejemplo && ' ', marcaEjemplo(c),
+              c.tipo && el('div', {}, el('span', { class: 'org-type-badge' }, c.tipo))),
+            el('td', {}, c.organismo || '—'),
+            el('td', {}, `${c.horas_certificadas ?? '—'} h`),
+            el('td', {}, String(c.escuelas_participantes ?? 0)),
+            el('td', {}, String(c.participantes_inscritos ?? 0)),
+            el('td', {}, el('span', { class: `status-badge ${c.estado === 'En Curso' ? 'active' : ''}` }, c.estado)),
+            conBase && el('td', {}, c.ejemplo ? '—' : el('div', { class: 'cap-acciones' },
+              boton('btn-approve', 'fa-user-plus', 'Cargar presentes', () => this._cargarPresentes(c.id),
+                `Cargar presentes de ${c.titulo}`),
+              c.participantes_inscritos ? boton('', 'fa-award', 'Ver certificados', () => this._verCertificados(c),
+                `Ver certificados de ${c.titulo}`) : null))
           )))
     ));
+  },
+
+  /** Ventana de carga (grilla o Excel) para los estudiantes presentes. */
+  async _cargarPresentes(capacitacionId) {
+    try {
+      const { abrirCarga } = await import('../certificados/carga.js');
+      await abrirCarga(this._ctx, {
+        capacitacionId,
+        alTerminar: () => Promise.all([this._dibujar('capacitaciones'), this._dibujar('certificados')])
+      });
+    } catch (error) {
+      this._ctx.emitir('aviso', { texto: error.message, tipo: 'error' });
+    }
+  },
+
+  /** Salta a la solapa Certificados, filtrada por esta capacitación. */
+  async _verCertificados(capacitacion) {
+    this._mostrarSolapa('certificados');
+    this._ctx.actualizarParams?.({ tab: 'certificados' });
+    const contenedor = document.getElementById('admin-tab-certificados');
+    const { dibujarCertificados } = await import('../certificados/panel.js');
+    await dibujarCertificados(contenedor, this._ctx, { filtros: { charla: capacitacion.titulo } });
   },
 
   /* --------------------------------------------------------- certificados */

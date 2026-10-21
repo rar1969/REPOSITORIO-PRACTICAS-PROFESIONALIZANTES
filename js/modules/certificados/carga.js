@@ -1,5 +1,7 @@
 /**
- * modules/certificados/carga — carga de certificados desde el Panel DETyFP.
+ * modules/certificados/carga — carga de los estudiantes presentes en una
+ * capacitación, desde la solapa Capacitaciones del Panel DETyFP. Cada
+ * presente recibe su certificado (queda pendiente de imprimir).
  *
  * Una ventana con dos partes:
  *   1. La charla: una que ya está en la base, o una nueva (capacitación,
@@ -39,7 +41,7 @@ const comparar = (a, b) => String(a ?? '').localeCompare(String(b ?? ''), 'es', 
 
 /* ======================================================= ventana de carga */
 
-export async function abrirCarga(ctx, { alTerminar } = {}) {
+export async function abrirCarga(ctx, { alTerminar, capacitacionId } = {}) {
   const api = ctx.api;
   const avisar = (texto, tipo = 'info') => ctx.emitir('aviso', { texto, tipo });
 
@@ -445,7 +447,7 @@ export async function abrirCarga(ctx, { alTerminar } = {}) {
     icono('fa-floppy-disk'), ' Guardar en la base');
   const dialogo = el('dialog', { class: 'cert-dialogo', 'aria-labelledby': 'cert-carga-titulo' },
     el('div', { class: 'cert-dialogo-cabecera' },
-      el('h3', { id: 'cert-carga-titulo' }, 'Cargar estudiantes y certificados'),
+      el('h3', { id: 'cert-carga-titulo' }, 'Cargar estudiantes presentes'),
       el('button', { type: 'button', class: 'btn-action-sm', 'aria-label': 'Cerrar', onclick: () => dialogo.close() },
         icono('fa-xmark'))),
     el('section', {},
@@ -453,7 +455,7 @@ export async function abrirCarga(ctx, { alTerminar } = {}) {
       campo('Charla a la que asistieron', selDictado, { class: 'cert-campo cert-ancho' }),
       bloqueNueva),
     el('section', {},
-      el('h4', {}, '2. Estudiantes'),
+      el('h4', {}, '2. Estudiantes presentes'),
       el('div', { class: 'cert-acciones' },
         el('p', { class: 'cert-ayuda' },
           'Tipeá o pegá desde Excel (Ctrl+V). Enter baja a la fila siguiente. ',
@@ -478,6 +480,12 @@ export async function abrirCarga(ctx, { alTerminar } = {}) {
   dialogo.addEventListener('close', () => dialogo.remove());
   document.body.append(dialogo);
   llenarCharlas('');
+  // Abierta desde una capacitación: queda elegida; se completa escuela y fecha
+  // (si esa charla ya existe, se reutiliza al guardar).
+  if (capacitacionId && capacitacionDe(capacitacionId)) {
+    selDictado.value = NUEVA;
+    selCapacitacion.value = capacitacionId;
+  }
   mostrarNueva();
   dibujarGrilla();
   dialogo.showModal();

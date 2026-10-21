@@ -31,7 +31,7 @@ const ordenar = lista => [...lista].sort((a, b) =>
 /** Un panel por contenedor: la solapa se redibuja sin perder filtros ni selección. */
 const paneles = new WeakMap();
 
-export async function dibujarCertificados(contenedor, ctx) {
+export async function dibujarCertificados(contenedor, ctx, { filtros } = {}) {
   let panel = paneles.get(contenedor);
   if (!panel) {
     panel = crearPanel(contenedor, ctx);
@@ -39,6 +39,7 @@ export async function dibujarCertificados(contenedor, ctx) {
   }
   panel.ctx = ctx;
   await panel.recargar();
+  if (filtros) panel.filtrar(filtros);
 }
 
 function crearPanel(contenedor, ctx) {
@@ -90,16 +91,6 @@ function crearPanel(contenedor, ctx) {
   const cuerpo = el('tbody');
   const aviso = el('div');
 
-  const botonCargar = el('button', { type: 'button', class: 'btn-primary-action nav-btn',
-    onclick: async () => {
-      try {
-        const { abrirCarga } = await import('./carga.js');
-        await abrirCarga(panel.ctx, { alTerminar: () => panel.recargar() });
-      } catch (error) {
-        panel.ctx.emitir('aviso', { tipo: 'error', texto: error.message });
-      }
-    } }, icono('fa-table-list'), ' Cargar estudiantes');
-
   reemplazar(contenedor, [
     el('div', { class: 'cert-encabezado' },
       el('div', {},
@@ -107,8 +98,7 @@ function crearPanel(contenedor, ctx) {
         el('p', { style: { color: 'var(--text-muted)' } },
           'Elegí escuela y charla, marcá los estudiantes y generá un solo PDF listo para imprimir. ',
           'Cada certificado generado queda registrado como impreso. ',
-          'Para sumar estudiantes, tipealos o pegalos en una grilla, o subí un Excel.')),
-      botonCargar),
+          'Los estudiantes presentes se cargan desde la solapa Capacitaciones.'))),
     aviso,
     el('div', { class: 'cert-filtros' }, selEscuela, selCharla, selEstado, buscador),
     el('div', { class: 'cert-opciones' },
@@ -276,6 +266,15 @@ function crearPanel(contenedor, ctx) {
 
   const panel = {
     ctx,
+    /** Aplica filtros desde afuera (p. ej., "Ver certificados" de una capacitación). */
+    filtrar(nuevos) {
+      Object.assign(estado.filtros, { escuela: '', charla: '', estado: '', q: '' }, nuevos);
+      selEscuela.value = estado.filtros.escuela;
+      selCharla.value = estado.filtros.charla;
+      selEstado.value = estado.filtros.estado;
+      buscador.value = estado.filtros.q;
+      dibujarLista();
+    },
     async recargar() {
       if (panel.ctx.api.origen !== 'supabase') {
         reemplazar(aviso, el('p', { class: 'cert-alerta' }, icono('fa-database'), ' ',

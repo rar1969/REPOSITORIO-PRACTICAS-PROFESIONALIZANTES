@@ -392,8 +392,15 @@
 
           <!-- Tab 4: Situación de Capacitaciones -->
           <div id="admin-tab-capacitaciones" class="admin-tab-content" style="display: none;">
-            <h3>Situación de Capacitaciones en Organismos Públicos y Privados</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Cursos y programas de formación técnica certificados en Tucumán.</p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+              <div>
+                <h3>Situación de Capacitaciones en Organismos Públicos y Privados</h3>
+                <p style="color: var(--text-muted);">Cursos y programas de formación técnica certificados en Tucumán. Cargá los estudiantes presentes de cada charla: cada uno recibe su certificado, que se imprime desde la solapa Certificados.</p>
+              </div>
+              <button type="button" id="btn-cargar-presentes" class="btn-primary-action nav-btn" style="display: none;">
+                <i class="fas fa-user-plus"></i> Cargar presentes
+              </button>
+            </div>
             <div id="admin-capacitaciones-table-wrapper" class="table-responsive">
               <!-- Renderizado dinámico -->
             </div>

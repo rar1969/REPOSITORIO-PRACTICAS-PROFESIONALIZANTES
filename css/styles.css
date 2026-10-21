@@ -1274,3 +1274,5 @@ img {
 .cert-grupo-activo { font-weight: 700; }
 @media (max-width: 640px) { .cert-ancho { grid-column: span 1; } }
 .cert-dialogo [hidden] { display: none !important; }
+.cap-acciones { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+.cap-acciones .btn-action-sm { margin: 0; white-space: nowrap; }
