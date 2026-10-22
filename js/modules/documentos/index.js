@@ -4,8 +4,10 @@
  * Persistente, porque el formulario "Subir documento" se abre desde dos
  * lugares (el repositorio y el panel DETyFP) y la descarga se pide desde los
  * dos también. Quien pide emite `documento:descargar`; este módulo atiende.
- * Un documento puede ser un archivo subido o un enlace a la fuente oficial
- * (`url`), como la Ley 26.058 en el sitio de normativa nacional.
+ * Un documento puede ser un archivo subido, un enlace a la fuente oficial
+ * (`url`), como la Ley 26.058 en el sitio de normativa nacional, o un enlace
+ * a un archivo o carpeta de Google Drive: el portal guarda la ficha con el
+ * enlace y quien lo consulta lo abre en Drive (siempre la última versión).
  *
  * Arregla una falla que estaba en producción: el formulario de carga no tenía
  * quién lo atendiera desde la limpieza de app.js, así que "Publicar documento"
@@ -22,6 +24,7 @@
  */
 
 import { abrirModal, cerrarModal } from '../../ui/modal.js';
+import { leerEnlaceDrive } from './drive.js';
 
 const EXTENSIONES = ['pdf', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'zip', 'odt', 'ods'];
 const archivosDeLaSesion = new Map();   // id del documento → { url, nombre }
@@ -80,12 +83,47 @@ export default {
     }
     entrada?.addEventListener('change', mostrarNombre);
 
+    // Origen del documento: archivo de la computadora o enlace de Drive.
+    const zonaArchivo = document.getElementById('upload-doc-zona-archivo');
+    const zonaDrive = document.getElementById('upload-doc-zona-drive');
+    const enlace = document.getElementById('upload-doc-url');
+    const estadoEnlace = document.getElementById('upload-doc-url-estado');
+    const origen = () => formulario?.querySelector('input[name="upload-doc-origen"]:checked')?.value ?? 'archivo';
+    const cambiarOrigen = () => {
+      const drive = origen() === 'drive';
+      if (zonaArchivo) zonaArchivo.hidden = drive;
+      if (zonaDrive) zonaDrive.hidden = !drive;
+      if (enlace) enlace.required = drive;
+      if (drive) enlace?.focus();
+    };
+    const revisarEnlace = () => {
+      if (!estadoEnlace || !enlace) return;
+      if (!enlace.value.trim()) { estadoEnlace.textContent = ''; return; }
+      try {
+        const { tipo } = leerEnlaceDrive(enlace.value);
+        estadoEnlace.textContent = `✓ ${tipo} reconocido.`;
+        estadoEnlace.dataset.estado = 'ok';
+      } catch (error) {
+        estadoEnlace.textContent = error.message;
+        estadoEnlace.dataset.estado = 'error';
+      }
+    };
+    for (const opcion of formulario?.querySelectorAll('input[name="upload-doc-origen"]') ?? []) {
+      opcion.addEventListener('change', cambiarOrigen);
+      this._desconectar.push(() => opcion.removeEventListener('change', cambiarOrigen));
+    }
+    enlace?.addEventListener('input', revisarEnlace);
+    this._desconectar.push(() => enlace?.removeEventListener('input', revisarEnlace));
+
     const enviar = async evento => {
       evento.preventDefault();
       try {
-        await this._publicar(entrada?.files?.[0]);
+        if (origen() === 'drive') await this._publicarEnlace(enlace?.value);
+        else await this._publicar(entrada?.files?.[0]);
         formulario.reset();
         mostrarNombre();
+        cambiarOrigen();
+        revisarEnlace();
         cerrarModal('subir-doc');
       } catch (error) {
         ctx.emitir('aviso', { texto: error.message, tipo: 'error' });
@@ -136,6 +174,31 @@ export default {
 
     this._ctx.emitir('documentos:cambiaron', documento);
     this._ctx.emitir('aviso', { texto: `"${documento.titulo}" publicado en el repositorio.`, tipo: 'success' });
+    return documento;
+  },
+
+  /** Documento que vive en Google Drive: se guarda la ficha con el enlace. */
+  async _publicarEnlace(texto) {
+    const { url, tipo } = leerEnlaceDrive(texto);
+    const valor = id => document.getElementById(id)?.value.trim() ?? '';
+    const documento = await this._ctx.api.crear('documentos', {
+      titulo: valor('upload-doc-title'),
+      descripcion: valor('upload-doc-desc'),
+      categoria: valor('upload-doc-cat'),
+      version: valor('upload-doc-version'),
+      tipo_archivo: tipo,
+      tamanio: 'Google Drive',
+      fecha: new Date().toISOString().slice(0, 10),
+      organismo: 'Dirección de Educación Técnica y Formación Profesional',
+      estado: 'Vigente',
+      descargas: 0,
+      url
+    });
+    this._ctx.emitir('documentos:cambiaron', documento);
+    this._ctx.emitir('aviso', {
+      texto: `"${documento.titulo}" publicado con su enlace de Drive. Revisá que esté compartido como «Cualquier persona con el enlace».`,
+      tipo: 'success'
+    });
     return documento;
   },
 

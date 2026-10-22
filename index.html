@@ -532,7 +532,12 @@
       </div>
       <form id="form-subir-doc">
         <div class="form-grid">
-          <div class="form-group form-group-full">
+          <fieldset class="form-group form-group-full origen-doc">
+            <legend>¿De dónde sale el documento? (*)</legend>
+            <label><input type="radio" name="upload-doc-origen" value="archivo" checked> <i class="fas fa-laptop"></i> Desde la computadora</label>
+            <label><input type="radio" name="upload-doc-origen" value="drive"> <i class="fab fa-google-drive"></i> Enlace de Google Drive</label>
+          </fieldset>
+          <div class="form-group form-group-full" id="upload-doc-zona-archivo">
             <label>Seleccionar Archivo Real (*)</label>
             <div class="file-dropzone">
               <i class="fas fa-cloud-arrow-up"></i>
@@ -540,6 +545,12 @@
               <p style="font-size: 0.8rem; color: var(--text-muted);" id="file-selected-name">Soporta PDF, DOCX, XLSX, ZIP</p>
               <input type="file" id="upload-doc-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.pptx,.odt,.ods,.zip" style="display: none;">
             </div>
+          </div>
+          <div class="form-group form-group-full" id="upload-doc-zona-drive" hidden>
+            <label for="upload-doc-url">Enlace de Google Drive (*)</label>
+            <input type="url" id="upload-doc-url" placeholder="https://drive.google.com/file/d/…" autocomplete="off">
+            <p class="ayuda-drive">En Drive: botón derecho sobre el archivo → <strong>Compartir</strong> → en «Acceso general» elegí <strong>Cualquier persona con el enlace (Lector)</strong> → <strong>Copiar enlace</strong>. Sirve para archivos, documentos de Google, planillas, presentaciones y carpetas.</p>
+            <p class="ayuda-drive" id="upload-doc-url-estado" aria-live="polite"></p>
           </div>
           <div class="form-group form-group-full">
             <label for="upload-doc-title">Título del Documento (*)</label>

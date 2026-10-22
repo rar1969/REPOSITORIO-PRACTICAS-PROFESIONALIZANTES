@@ -1276,3 +1276,14 @@ img {
 .cert-dialogo [hidden] { display: none !important; }
 .cap-acciones { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; }
 .cap-acciones .btn-action-sm { margin: 0; white-space: nowrap; }
+
+/* Subir documento: origen (computadora o Google Drive) */
+.origen-doc { border: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+.origen-doc legend { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.4rem; padding: 0; }
+.origen-doc label { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 500; }
+.ayuda-drive { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.45; }
+.ayuda-drive[data-estado="ok"] { color: var(--accent-green); }
+.ayuda-drive[data-estado="error"] { color: var(--accent-red); }
+[hidden] { display: none !important; }
+.form-group.origen-doc label { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0; white-space: nowrap; }
+.form-group.origen-doc input[type="radio"] { width: auto; padding: 0; margin: 0; accent-color: var(--primary); }
