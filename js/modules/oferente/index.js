@@ -76,11 +76,14 @@ function ficha(o, vincular) {
                          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' } },
       el('div', {},
         el('strong', {}, icono('fa-location-dot'), ' Ubicación:'), el('br'),
-        [o.direccion, o.localidad].filter(Boolean).join(', '), ` (Dpto. ${o.departamento})`),
+        [o.direccion, o.localidad].filter(Boolean).join(', ') || 'A confirmar',
+        o.departamento ? ` (Dpto. ${o.departamento})` : ''),
       el('div', {},
         el('strong', {}, icono('fa-user-tie'), ' Contacto institucional:'), el('br'),
-        o.contacto_persona ?? '', el('br'),
-        o.correo && el('a', { href: `mailto:${o.correo}` }, o.correo))
+        o.contacto_persona || o.correo
+          ? [o.contacto_persona ?? '', el('br'),
+             o.correo && el('a', { href: `mailto:${o.correo}` }, o.correo)]
+          : 'A través de la DETyFP')
     ),
 
     o.ejemplo && el('p', { role: 'note', style: { background: '#fef3c7', color: '#92400e',
@@ -91,6 +94,11 @@ function ficha(o, vincular) {
       el('h4', {}, 'Perfiles y tareas requeridas'),
       el('p', { style: { marginTop: '0.25rem' } }, o.perfiles_requeridos)),
 
+    (o.escuelas_vinculadas ?? []).length > 0 && el('div', { style: { marginBottom: '1.5rem' } },
+      el('h4', {}, 'Escuelas con acta acuerdo'),
+      el('ul', { style: { marginTop: '0.35rem', paddingLeft: '1.2rem' } },
+        o.escuelas_vinculadas.map(e => el('li', {}, e)))),
+
     el('div', { style: { marginBottom: '1.5rem' } },
       el('h4', {}, 'Especialidades ETP asociadas'),
       el('div', { class: 'specialties-tags', style: { marginTop: '0.5rem' } },
@@ -100,10 +108,14 @@ function ficha(o, vincular) {
                          flexWrap: 'wrap', gap: '1rem', background: 'var(--primary-light)',
                          padding: '1rem', borderRadius: 'var(--radius-md)', color: 'var(--primary)' } },
       el('div', {},
-        el('strong', {}, `Vacantes activas: ${o.cupos_disponibles ?? 0} cupos`), el('br'),
-        el('small', {}, o.convenio_vigente && o.fecha_vencimiento
-          ? `Convenio vigente hasta ${o.fecha_vencimiento}`
-          : 'Convenio en trámite')),
+        el('strong', {}, o.cupos_disponibles > 0
+          ? `Vacantes activas: ${o.cupos_disponibles} cupos`
+          : 'Vacantes: a informar'), el('br'),
+        el('small', {}, !o.convenio_vigente
+          ? 'Convenio en trámite'
+          : o.fecha_vencimiento
+            ? `Convenio vigente hasta ${o.fecha_vencimiento}`
+            : 'Convenio vigente (acta acuerdo firmada)')),
       el('button', { type: 'button', class: 'btn-primary-action nav-btn', onclick: vincular },
         icono('fa-paper-plane'), ' Solicitar vinculación')
     )

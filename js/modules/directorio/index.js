@@ -111,6 +111,16 @@ export default {
 
 /* ------------------------------------------------------------------ vistas */
 
+/** Localidad y departamento, sin mostrar «null» cuando falta alguno. */
+function ubicacion(o) {
+  const partes = [o.localidad, o.departamento && `Dpto. ${o.departamento}`].filter(Boolean);
+  return partes.length ? partes.join(', ') : 'Ubicación a confirmar';
+}
+
+function vinculadas(n) {
+  return n === 1 ? 'Vinculada a 1 escuela' : `Vinculada a ${n} escuelas`;
+}
+
 function tarjeta(oferente, ctx) {
   const vigente = Boolean(oferente.convenio_vigente);
 
@@ -125,7 +135,7 @@ function tarjeta(oferente, ctx) {
     el('div', { class: 'card-title' },
       el('h3', {}, oferente.razon_social),
       el('div', { class: 'card-location' },
-        icono('fa-location-dot'), ` ${oferente.localidad}, Dpto. ${oferente.departamento}`)
+        icono('fa-location-dot'), ` ${ubicacion(oferente)}`)
     ),
 
     el('div', { class: 'specialties-tags' },
@@ -135,8 +145,12 @@ function tarjeta(oferente, ctx) {
 
     el('div', { class: 'card-details' },
       el('span', {}, icono('fa-users'), ' Vacantes: ',
-        el('strong', { class: 'cupos-highlight' }, `${oferente.cupos_disponibles ?? 0} cupos`)),
-      el('span', {}, icono('fa-calendar'), ` Act: ${oferente.fecha_actualizacion ?? 's/d'}`)
+        oferente.cupos_disponibles > 0
+          ? el('strong', { class: 'cupos-highlight' }, `${oferente.cupos_disponibles} cupos`)
+          : 'a informar'),
+      (oferente.escuelas_vinculadas ?? []).length > 0
+        ? el('span', {}, icono('fa-school'), ` ${vinculadas(oferente.escuelas_vinculadas.length)}`)
+        : el('span', {}, icono('fa-calendar'), ` Act: ${oferente.fecha_actualizacion ?? 's/d'}`)
     ),
 
     el('div', { class: 'card-actions' },
