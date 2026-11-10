@@ -41,9 +41,10 @@ export default {
   },
 
   async _vincular(oferente) {
+    const ampliar = tieneActa(oferente);
     await this._ctx.api.crear('solicitudes', {
       tipo: 'vinculacion',
-      titulo: oferente.razon_social,
+      titulo: ampliar ? `${oferente.razon_social} — sumar otra escuela` : oferente.razon_social,
       oferente_id: oferente.id,
       solicitante: `Perfil: ${this._ctx.sesion?.etiquetaRol?.() ?? 'Visitante'}`,
       departamento: oferente.departamento,
@@ -53,11 +54,18 @@ export default {
     cerrarModal('detalle');
     this._ctx.emitir('solicitudes:cambiaron');
     this._ctx.emitir('aviso', {
-      texto: 'Pedido de vinculación registrado. La Dirección de ETP se contacta con el establecimiento.',
+      texto: ampliar
+        ? 'Pedido registrado. La Dirección de ETP evalúa sumar otra escuela al acuerdo con esta organización.'
+        : 'Pedido de vinculación registrado. La Dirección de ETP se contacta con el establecimiento.',
       tipo: 'success'
     });
   }
 };
+
+/** Convenio vigente y al menos una escuela con acta: ya no hay que «vincular». */
+function tieneActa(o) {
+  return Boolean(o.convenio_vigente) && (o.escuelas_vinculadas ?? []).length > 0;
+}
 
 function ficha(o, vincular) {
   const caja = { background: 'var(--bg-main)', padding: '1rem', borderRadius: 'var(--radius-md)' };
@@ -115,9 +123,11 @@ function ficha(o, vincular) {
           ? 'Convenio en trámite'
           : o.fecha_vencimiento
             ? `Convenio vigente hasta ${o.fecha_vencimiento}`
-            : 'Convenio vigente (acta acuerdo firmada)')),
+            : 'Convenio vigente (acta acuerdo firmada)'),
+        tieneActa(o) && [el('br'), el('small', {},
+          'Ya tiene acta firmada. Si otra escuela quiere hacer prácticas acá, pedilo a la DETyFP.')]),
       el('button', { type: 'button', class: 'btn-primary-action nav-btn', onclick: vincular },
-        icono('fa-paper-plane'), ' Solicitar vinculación')
+        icono('fa-paper-plane'), tieneActa(o) ? ' Sumar otra escuela' : ' Solicitar vinculación')
     )
   );
 }
