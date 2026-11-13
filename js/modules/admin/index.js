@@ -1,10 +1,11 @@
 /**
  * modules/admin — Panel de gestión de la DETyFP.
  *
- * Última vista migrada: con ella, app.js deja de existir. Reúne seis
- * solapas —bandeja de solicitudes, especialidades, nómina de practicantes,
+ * Última vista migrada: con ella, app.js deja de existir. Reúne siete
+ * solapas —bandeja de solicitudes, estadísticas, especialidades, nómina de practicantes,
  * capacitaciones, certificados y documentos— y es el único módulo con
- * `roles: ['admin']`. La de certificados vive en modules/certificados.
+ * `roles: ['admin']`. La de certificados vive en modules/certificados y la
+ * de estadísticas en modules/estadisticas.
  *
  * Lo que cambia respecto del prototipo:
  *
@@ -25,7 +26,7 @@
 import { el, icono, reemplazar, marcaEjemplo } from '../../ui/dom.js';
 import { abrirModal, cerrarModal } from '../../ui/modal.js';
 
-const SOLAPAS = ['solicitudes', 'especialidades', 'alumnos', 'capacitaciones', 'certificados', 'documentos'];
+const SOLAPAS = ['solicitudes', 'estadisticas', 'especialidades', 'alumnos', 'capacitaciones', 'certificados', 'documentos'];
 const TIPOS_SOLICITUD = {
   oferente: 'Oferente', experiencia: 'Experiencia', replica: 'Réplica', vinculacion: 'Vinculación'
 };
@@ -52,7 +53,8 @@ export default {
     this._desconectar.push(
       ctx.escuchar('solicitudes:cambiaron', redibujar('solicitudes')),
       ctx.escuchar('documentos:cambiaron', redibujar('documentos')),
-      ctx.escuchar('especialidades:cambiaron', redibujar('especialidades'))
+      ctx.escuchar('especialidades:cambiaron', redibujar('especialidades')),
+      ctx.escuchar('solicitudes:cambiaron', redibujar('estadisticas'))
     );
 
     this._mostrarSolapa(this._solapa);
@@ -99,6 +101,7 @@ export default {
   async _dibujar(solapa) {
     const dibujantes = {
       solicitudes: () => this._dibujarSolicitudes(),
+      estadisticas: () => this._dibujarEstadisticas(),
       especialidades: () => this._dibujarEspecialidades(),
       alumnos: () => this._dibujarAlumnos(),
       capacitaciones: () => this._dibujarCapacitaciones(),
@@ -371,6 +374,16 @@ export default {
     // Se importa al abrir el panel; pdf-lib y las fuentes, recién al generar.
     const { dibujarCertificados } = await import('../certificados/panel.js');
     await dibujarCertificados(contenedor, this._ctx);
+  },
+
+  /* --------------------------------------------------------- estadisticas */
+
+  async _dibujarEstadisticas() {
+    const contenedor = document.getElementById('admin-tab-estadisticas');
+    if (!contenedor) return;
+    // Solo lectura: se importa al abrir el panel, como certificados.
+    const { dibujarEstadisticas } = await import('../estadisticas/panel.js');
+    await dibujarEstadisticas(contenedor, this._ctx);
   },
 
   /* ----------------------------------------------------------- documentos */
